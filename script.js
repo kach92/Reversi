@@ -13,6 +13,10 @@ var addTile = function(event){
     var getX = parseInt(event.target.getAttribute("x-axis"));
     var getY = parseInt(event.target.getAttribute("y-axis"));
     var getSym = counter%2===0? "W":"B"
+    var roughtCount = 0;
+
+
+
 
     if(checkOKtoPlace(getSym,getX,getY)){
         var aTile = document.createElement("div");
@@ -36,8 +40,10 @@ var addTile = function(event){
     }
     var whiteCount = 0;
     var blackCount = 0;
+
     for(var i=0;i<boardLength;i++){
         for(var j=0;j<boardLength;j++){
+
             if(boardArray[i][j] === "W")
                 whiteCount += 1;
             else if(boardArray[i][j] === "B")
@@ -46,8 +52,30 @@ var addTile = function(event){
         }
     }
 
+
     blackScore.innerHTML = blackCount;
     whiteScore.innerHTML = whiteCount;
+
+    var getSym = counter%2===0? "W":"B"
+    console.log(getSym + "turn");
+    for(var y=0;y<boardLength;y++){
+        for(var x=0;x<boardLength;x++){
+            if(boardArray[y][x]===null){
+                if(checkOKtoPlace(getSym,x,y)){
+                    roughtCount++;
+                }
+            }
+
+        }
+    }
+    if(roughtCount>0){
+        console.log(roughtCount);
+        console.log(getSym + "still can");
+    }else{
+        console.log(getSym+ "cannot d");
+    }
+
+
 
 }
 
@@ -308,7 +336,7 @@ var checkLeft = function(sym,x,y){
     if(x<2){
         return false
     }else{
-        if(boardArray[y][x-1]!==null && boardArray[y][x-1]!== undefined){
+        if(boardArray[y][x-1]!==null){
             if(boardArray[y][x-1]!==sym){
                 var minCount =x+1;
                 for(i=2;i<minCount;i++){
@@ -522,48 +550,88 @@ var changeRespectiveTiles = function(target,sym,x,y){
 
 
 
-var drawCheck = function(){
-    var nullCount = 0;
-    for(i=0;i<boardLength;i++){
-        for(j=0;j<boardLength;j++){
-            if(boardArray[i][j]){
-                //check top left
-                if(boardArray[i-1][j-1]===null){
+// var drawCheck = function(sym){
 
-                }
-                //check top
-                else if(boardArray[i-1][j]===null){
+//         var okCount = 0;
+//         for(var y=0;y<boardLength;y++){
+//             for(var x=0;x<boardLength;x++){
+//                 debugger;
+//                 if(boardArray[y][x]!==null){
 
-                }
-                //check top right
-                else if(boardArray[i-1][j+1]===null){
 
-                }
-                //check right
-                else if(boardArray[i][j+1]===null){
 
-                }
-                //check bottom right
-                else if(boardArray[i+1][j+1]===null){
 
-                }
-                //check bottom
-                else if(boardArray[i+1][j]===null){
+                    //check top left
+        //             debugger;
+        //             if(boardArray[y-1][x-1]===null){
+        //                 if(checkBottomRight(sym,x-1,y-1)){
+        //                     okCount++;
+        //                 }
+        //                 debugger;
+        //             }
+        //             //check top
+        //             else if(boardArray[y-1][x]===null){
+        //                 if(checkBottom(sym,x,y-1)){
+        //                     okCount++;
+        //                 }
+        //                 debugger;
+        //             }
+        //             //check top right
+        //             else if(boardArray[y-1][x+1]===null){
+        //                 if(checkBottomLeft(sym,x+1,y-1)){
+        //                     okCount++;
+        //                 }
+        //                 debugger;
+        //             }
+        //             //check right
+        //             else if(boardArray[y][x+1]===null){
+        //                 if(checkLeftRight(sym,x+1,y)){
+        //                     okCount++;
+        //                 }
+        //                 debugger;
+        //             }
+        //             //check bottom right
+        //             else if(boardArray[y+1][x+1]===null){
+        //                 if(checkTopLeft(sym,x+1,y+1)){
+        //                     okCount++;
+        //                 }
+        //                 debugger;
+        //             }
+        //             //check bottom
+        //             else if(boardArray[y+1][x]===null){
+        //                 if(checkTop(sym,x,y+1)){
+        //                     okCount++;
+        //                 }
+        //                 debugger;
+        //             }
+        //             //check bottom left
+        //             else if(boardArray[y+1][x-1]===null){
+        //                 if(checkTopRight(sym,x-1,y+1)){
+        //                     okCount++;
+        //                 }
+        //                 debugger;
+        //             }
+        //             //check left
+        //             else if(boardArray[y][x-1]===null){
+        //                 if(checkRight(sym,x-1,y)){
+        //                     okCount++;
+        //                 }
+        //                 debugger;
+        //             }
+        //         }else{
+        //             continue;
+        //         }
+        //         debugger;
+        //     }
+        // }
+        // if(okCount ===0){
+        //     console.log("No More");
+        // }else{
+        //     console.log("Still Ok")
+        // }
 
-                }
-                //check bottom left
-                else if(boardArray[i+1][j-1]===null){
 
-                }
-                //check left
-                else if(boardArray[i][j-1]===null){
-
-                }
-
-            }
-        }
-    }
-}
+// }
 
 
 
