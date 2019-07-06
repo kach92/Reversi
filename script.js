@@ -1,9 +1,10 @@
 console.log("Hello  ")
 var boardLength = 8;
-var counter = 0;
+var counter = 1;
 var boardArray = [];
 var directionToGo = [];
-var botMode = false;
+var botMode = true;
+var demo = true;
 
 
 var blackScore = document.getElementById("black-score");
@@ -42,6 +43,7 @@ var addTile = function(event){
     var whiteCount = 0;
     var blackCount = 0;
 
+    //check all tiles on board and display
     for(var i=0;i<boardLength;i++){
         for(var j=0;j<boardLength;j++){
 
@@ -52,11 +54,10 @@ var addTile = function(event){
 
         }
     }
-
-
     blackScore.innerHTML = blackCount;
     whiteScore.innerHTML = whiteCount;
 
+    //check any move left
     var getSym = counter%2===0? "W":"B"
     console.log(getSym + "turn");
     for(var y=0;y<boardLength;y++){
@@ -71,10 +72,18 @@ var addTile = function(event){
     }
     if(roughtCount>0){
         console.log(getSym + "still can");
+        glowchange(getSym);
     }else{
         console.log(getSym+ "cannot d");
+        stopGlow1();
+        stopGlow2();
+        botMode = false;
     }
 
+
+
+
+    //bot mode on and off
     if(botMode){
         setTimeout(aiTurn,3000);
     }
@@ -82,6 +91,33 @@ var addTile = function(event){
 
 }
 
+
+var startGlow1 = function(){
+    document.getElementById("glow-1").style.visibility = "visible";
+}
+
+var startGlow2 = function(){
+    document.getElementById("glow-2").style.visibility = "visible";
+}
+
+var stopGlow1 = function(){
+    document.getElementById("glow-1").style.visibility = "hidden";
+}
+
+var stopGlow2 = function(){
+    document.getElementById("glow-2").style.visibility = "hidden";
+}
+
+    //change glow
+var glowchange = function(sym){
+    if(sym === "W"){
+            stopGlow1();
+            startGlow2();
+        }else{
+            startGlow1();
+            stopGlow2();
+        }
+}
 
 var createBoardArray = function(){
     boardArray = [];
@@ -555,95 +591,107 @@ var changeRespectiveTiles = function(target,sym,x,y){
 
 
 var aiTurn = function(){
-    var getSym = counter%2===0? "W":"B"
-    var objArray = [];
-    var maxChanged = 0;
-    var getX = null;
-    var getY = null;
-    var roughtCount = 0;
-    //collect all playable square and total changes that it will make,save it in an array of object
-    for(var y=0;y<boardLength;y++){
-        for(var x=0;x<boardLength;x++){
-            if(boardArray[y][x]===null){
-                if(checkOKtoPlace(getSym,x,y)){
-                    accumulator(objArray,getSym,x,y);
+    if(botMode){
+        var getSym = counter%2===0? "W":"B"
+        var objArray = [];
+        var maxChanged = 0;
+        var getX = null;
+        var getY = null;
+        var roughtCount = 0;
+        //collect all playable square and total changes that it will make,save it in an array of object
+        for(var y=0;y<boardLength;y++){
+            for(var x=0;x<boardLength;x++){
+                if(boardArray[y][x]===null){
+                    if(checkOKtoPlace(getSym,x,y)){
+                        accumulator(objArray,getSym,x,y);
+                    }
                 }
+
             }
-
         }
-    }
-    //check which square gives max change
-    for(i=0;i<objArray.length;i++){
-        if(objArray[i].total>=maxChanged){
-            maxChanged = objArray[i].total
+        //check which square gives max change
+        for(i=0;i<objArray.length;i++){
+            if(objArray[i].total>=maxChanged){
+                maxChanged = objArray[i].total
+            }
         }
-    }
 
-    //take x and y axis of max change
-    for(j=0;j<objArray.length;j++){
-        if(objArray[j].total === maxChanged){
-            getX = objArray[j]["x-axis"];
-            getY = objArray[j]["y-axis"];
-            break;
+        //take x and y axis of max change
+        for(j=0;j<objArray.length;j++){
+            if(objArray[j].total === maxChanged){
+                getX = objArray[j]["x-axis"];
+                getY = objArray[j]["y-axis"];
+                break;
+            }
         }
-    }
 
-    //do the move
-    checkOKtoPlace(getSym,getX,getY);
-    var getTarget = document.getElementById(getY*boardLength+getX);
-    var aTile = document.createElement("div");
-    if(getSym === "W"){
-        aTile.setAttribute("class","white-tiles");
-        boardArray[getY][getX] = getSym;
+        //do the move
+        checkOKtoPlace(getSym,getX,getY);
+        var getTarget = document.getElementById(getY*boardLength+getX);
+        var aTile = document.createElement("div");
+        if(getSym === "W"){
+            aTile.setAttribute("class","white-tiles");
+            boardArray[getY][getX] = getSym;
 
-     }else{
-        aTile.setAttribute("class","black-tiles");
-        boardArray[getY][getX] = getSym;
-     }
-     changeRespectiveTiles(getTarget,getSym,getX,getY);
+         }else{
+            aTile.setAttribute("class","black-tiles");
+            boardArray[getY][getX] = getSym;
+         }
+         changeRespectiveTiles(getTarget,getSym,getX,getY);
 
-    counter++;
-    getTarget.appendChild(aTile);
-    getTarget.removeEventListener("click",addTile);
+        counter++;
+        getTarget.appendChild(aTile);
+        getTarget.removeEventListener("click",addTile);
 
-    var whiteCount = 0;
-    var blackCount = 0;
+        var whiteCount = 0;
+        var blackCount = 0;
 
-    for(var i=0;i<boardLength;i++){
-        for(var j=0;j<boardLength;j++){
+        for(var i=0;i<boardLength;i++){
+            for(var j=0;j<boardLength;j++){
 
-            if(boardArray[i][j] === "W")
-                whiteCount += 1;
-            else if(boardArray[i][j] === "B")
-                blackCount +=1;
+                if(boardArray[i][j] === "W")
+                    whiteCount += 1;
+                else if(boardArray[i][j] === "B")
+                    blackCount +=1;
 
+            }
         }
-    }
 
 
-    blackScore.innerHTML = blackCount;
-    whiteScore.innerHTML = whiteCount;
+        blackScore.innerHTML = blackCount;
+        whiteScore.innerHTML = whiteCount;
 
-    var getSym = counter%2===0? "W":"B"
-    console.log(getSym + "turn");
-    for(var y=0;y<boardLength;y++){
-        for(var x=0;x<boardLength;x++){
-            if(boardArray[y][x]===null){
-                if(checkOKtoPlace(getSym,x,y)){
-                    roughtCount++;
+        var getSym = counter%2===0? "W":"B"
+        console.log(getSym + "turn");
+        for(var y=0;y<boardLength;y++){
+            for(var x=0;x<boardLength;x++){
+                if(boardArray[y][x]===null){
+                    if(checkOKtoPlace(getSym,x,y)){
+                        roughtCount++;
+                    }
                 }
-            }
 
+            }
         }
-    }
-    if(roughtCount>0){
-        console.log(getSym + "still can");
+
+        if(roughtCount>0){
+            console.log(getSym + "still can");
+            glowchange(getSym);
+        }else{
+            console.log(getSym+ "cannot d");
+            stopGlow1();
+            stopGlow2();
+            botMode = false;
+        }
     }else{
-        console.log(getSym+ "cannot d");
+        botMode = false;
+        stopDualBotMode;
     }
 
+}
 
-
+var stopDualBotMode = function(){
+    clearInterval(dualBotMode);
 }
 
 var accumulator = function(arr,sym,x,y){
@@ -826,6 +874,12 @@ document.addEventListener("DOMContentLoaded",function(){
     }
     createBoardArray();
     initialize();
+
+    if(demo){
+        var dualBotMode = setInterval(aiTurn,3000);
+    }
+
+
 
 })
 
