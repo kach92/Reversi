@@ -16,14 +16,13 @@ var addTile = function(event){
 
     if(checkOKtoPlace(getSym,getX,getY)){
         var aTile = document.createElement("div");
-        aTile.setAttribute("class","tiles");
 
         if(getSym === "W"){
-            aTile.style.backgroundColor="white";
+            aTile.setAttribute("class","white-tiles");
             boardArray[getY][getX] = getSym;
 
          }else{
-            aTile.style.backgroundColor="black";
+            aTile.setAttribute("class","black-tiles");
             boardArray[getY][getX] = getSym;
          }
          changeRespectiveTiles(event.target,getSym,getX,getY);
@@ -74,14 +73,14 @@ var initialize = function(){
         var getX = parseInt(getSquare.getAttribute("x-axis"));
         var getY = parseInt(getSquare.getAttribute("y-axis"));
         var aTile = document.createElement("div");
-        aTile.setAttribute("class","tiles");
+
         if(aCounter%2===0){
 
-            aTile.style.backgroundColor = "white";
+            aTile.setAttribute("class","white-tiles");
             boardArray[getY][getX]="W"
 
         }else{
-            aTile.style.backgroundColor = "black";
+            aTile.setAttribute("class","black-tiles");
             boardArray[getY][getX]="B"
         }
         getSquare.appendChild(aTile);
@@ -93,14 +92,13 @@ var initialize = function(){
         var getX = getSquare.getAttribute("x-axis");
         var getY = getSquare.getAttribute("y-axis");
         var aTile = document.createElement("div");
-        aTile.setAttribute("class","tiles");
         if(aCounter%2===0){
 
-            aTile.style.backgroundColor = "white";
+            aTile.setAttribute("class","white-tiles");
             boardArray[getY][getX]="W"
 
         }else{
-            aTile.style.backgroundColor = "black";
+            aTile.setAttribute("class","black-tiles");
             boardArray[getY][getX]="B"
         }
         getSquare.appendChild(aTile);
@@ -351,9 +349,9 @@ var changeRespectiveTiles = function(target,sym,x,y){
                             while(boardArray[y-i][x-i]!==sym){
                                 boardArray[y-i][x-i]=sym;
                                 if(sym === "W")
-                                    document.getElementById(boardLength*(y-i)+(x-i)).firstChild.style.backgroundColor = "white";
+                                    document.getElementById(boardLength*(y-i)+(x-i)).firstChild.setAttribute("class","white-tiles");
                                 else
-                                    document.getElementById(boardLength*(y-i)+(x-i)).firstChild.style.backgroundColor = "black";
+                                    document.getElementById(boardLength*(y-i)+(x-i)).firstChild.setAttribute("class","black-tiles");
                                 i++;
                             }
                             topLeftSettle = true;
@@ -372,9 +370,9 @@ var changeRespectiveTiles = function(target,sym,x,y){
                             while(boardArray[y-i][x]!==sym){
                                 boardArray[y-i][x]=sym;
                                 if(sym === "W")
-                                    document.getElementById(boardLength*(y-i)+x).firstChild.style.backgroundColor = "white";
+                                    document.getElementById(boardLength*(y-i)+x).firstChild.setAttribute("class","white-tiles");
                                 else
-                                    document.getElementById(boardLength*(y-i)+x).firstChild.style.backgroundColor = "black";
+                                    document.getElementById(boardLength*(y-i)+x).firstChild.setAttribute("class","black-tiles");
                                 i++;
                             }
                             topSettle = true;
@@ -393,9 +391,9 @@ var changeRespectiveTiles = function(target,sym,x,y){
                             while(boardArray[y-i][x+i]!==sym){
                                 boardArray[y-i][x+i]=sym;
                                 if(sym === "W")
-                                    document.getElementById(boardLength*(y-i)+(x+i)).firstChild.style.backgroundColor = "white";
+                                    document.getElementById(boardLength*(y-i)+(x+i)).firstChild.setAttribute("class","white-tiles");
                                 else
-                                    document.getElementById(boardLength*(y-i)+(x+i)).firstChild.style.backgroundColor = "black";
+                                    document.getElementById(boardLength*(y-i)+(x+i)).firstChild.setAttribute("class","black-tiles");
                                 i++;
                             }
                             topRightSettle = true;
@@ -415,9 +413,9 @@ var changeRespectiveTiles = function(target,sym,x,y){
                             while(boardArray[y][x+i]!==sym){
                                 boardArray[y][x+i]=sym;
                                 if(sym === "W")
-                                    document.getElementById(boardLength*y+(x+i)).firstChild.style.backgroundColor = "white";
+                                    document.getElementById(boardLength*y+(x+i)).firstChild.setAttribute("class","white-tiles");
                                 else
-                                    document.getElementById(boardLength*y+(x+i)).firstChild.style.backgroundColor = "black";
+                                    document.getElementById(boardLength*y+(x+i)).firstChild.setAttribute("class","black-tiles");
                                 i++;
                             }
                             rightSettle = true;
@@ -436,9 +434,9 @@ var changeRespectiveTiles = function(target,sym,x,y){
                             while(boardArray[y+i][x+i]!==sym){
                                 boardArray[y+i][x+i]=sym;
                                 if(sym === "W")
-                                    document.getElementById(boardLength*(y+i)+(x+i)).firstChild.style.backgroundColor = "white";
+                                    document.getElementById(boardLength*(y+i)+(x+i)).firstChild.setAttribute("class","white-tiles");
                                 else
-                                    document.getElementById(boardLength*(y+i)+(x+i)).firstChild.style.backgroundColor = "black";
+                                    document.getElementById(boardLength*(y+i)+(x+i)).firstChild.setAttribute("class","black-tiles");
                                 i++;
                             }
                             bottomRightSettle = true;
@@ -458,9 +456,9 @@ var changeRespectiveTiles = function(target,sym,x,y){
                             while(boardArray[y+i][x]!==sym){
                                 boardArray[y+i][x]=sym;
                                 if(sym === "W")
-                                    document.getElementById(boardLength*(y+i)+x).firstChild.style.backgroundColor = "white";
+                                    document.getElementById(boardLength*(y+i)+x).firstChild.setAttribute("class","white-tiles");
                                 else
-                                    document.getElementById(boardLength*(y+i)+x).firstChild.style.backgroundColor = "black";
+                                    document.getElementById(boardLength*(y+i)+x).firstChild.setAttribute("class","black-tiles");
                                 i++;
                             }
                             bottomSettle = true;
@@ -480,9 +478,9 @@ var changeRespectiveTiles = function(target,sym,x,y){
                             while(boardArray[y+i][x-i]!==sym){
                                 boardArray[y+i][x-i]=sym;
                                 if(sym === "W")
-                                    document.getElementById(boardLength*(y+i)+(x-i)).firstChild.style.backgroundColor = "white";
+                                    document.getElementById(boardLength*(y+i)+(x-i)).firstChild.setAttribute("class","white-tiles");
                                 else
-                                    document.getElementById(boardLength*(y+i)+(x-i)).firstChild.style.backgroundColor = "black";
+                                    document.getElementById(boardLength*(y+i)+(x-i)).firstChild.setAttribute("class","black-tiles");
                                 i++;
                             }
                             bottomLeftSettle = true;
@@ -502,9 +500,9 @@ var changeRespectiveTiles = function(target,sym,x,y){
                             while(boardArray[y][x-i]!==sym){
                                 boardArray[y][x-i]=sym;
                                 if(sym === "W")
-                                    document.getElementById(boardLength*y+(x-i)).firstChild.style.backgroundColor = "white";
+                                    document.getElementById(boardLength*y+(x-i)).firstChild.setAttribute("class","white-tiles");
                                 else
-                                    document.getElementById(boardLength*y+(x-i)).firstChild.style.backgroundColor = "black";
+                                    document.getElementById(boardLength*y+(x-i)).firstChild.setAttribute("class","black-tiles");
                                 i++;
                             }
                             leftSettle = true;
