@@ -3,6 +3,7 @@ var boardLength = 8;
 var counter = 0;
 var boardArray = [];
 var directionToGo = [];
+var botMode = false;
 
 
 var blackScore = document.getElementById("black-score");
@@ -69,12 +70,14 @@ var addTile = function(event){
         }
     }
     if(roughtCount>0){
-        console.log(roughtCount);
         console.log(getSym + "still can");
     }else{
         console.log(getSym+ "cannot d");
     }
 
+    if(botMode){
+        setTimeout(aiTurn,3000);
+    }
 
 
 }
@@ -500,6 +503,7 @@ var changeRespectiveTiles = function(target,sym,x,y){
                 break;
             case 6:
                 if(directionToGo[i]){
+
                     while(!bottomLeftSettle){
                         if(boardArray[y+1][x-1]!==null){
                             var i=1;
@@ -550,89 +554,261 @@ var changeRespectiveTiles = function(target,sym,x,y){
 
 
 
-// var drawCheck = function(sym){
+var aiTurn = function(){
+    var getSym = counter%2===0? "W":"B"
+    var objArray = [];
+    var maxChanged = 0;
+    var getX = null;
+    var getY = null;
+    var roughtCount = 0;
+    //collect all playable square and total changes that it will make,save it in an array of object
+    for(var y=0;y<boardLength;y++){
+        for(var x=0;x<boardLength;x++){
+            if(boardArray[y][x]===null){
+                if(checkOKtoPlace(getSym,x,y)){
+                    accumulator(objArray,getSym,x,y);
+                }
+            }
 
-//         var okCount = 0;
-//         for(var y=0;y<boardLength;y++){
-//             for(var x=0;x<boardLength;x++){
-//                 debugger;
-//                 if(boardArray[y][x]!==null){
+        }
+    }
+    //check which square gives max change
+    for(i=0;i<objArray.length;i++){
+        if(objArray[i].total>=maxChanged){
+            maxChanged = objArray[i].total
+        }
+    }
 
+    //take x and y axis of max change
+    for(j=0;j<objArray.length;j++){
+        if(objArray[j].total === maxChanged){
+            getX = objArray[j]["x-axis"];
+            getY = objArray[j]["y-axis"];
+            break;
+        }
+    }
 
+    //do the move
+    checkOKtoPlace(getSym,getX,getY);
+    var getTarget = document.getElementById(getY*boardLength+getX);
+    var aTile = document.createElement("div");
+    if(getSym === "W"){
+        aTile.setAttribute("class","white-tiles");
+        boardArray[getY][getX] = getSym;
 
+     }else{
+        aTile.setAttribute("class","black-tiles");
+        boardArray[getY][getX] = getSym;
+     }
+     changeRespectiveTiles(getTarget,getSym,getX,getY);
 
-                    //check top left
-        //             debugger;
-        //             if(boardArray[y-1][x-1]===null){
-        //                 if(checkBottomRight(sym,x-1,y-1)){
-        //                     okCount++;
-        //                 }
-        //                 debugger;
-        //             }
-        //             //check top
-        //             else if(boardArray[y-1][x]===null){
-        //                 if(checkBottom(sym,x,y-1)){
-        //                     okCount++;
-        //                 }
-        //                 debugger;
-        //             }
-        //             //check top right
-        //             else if(boardArray[y-1][x+1]===null){
-        //                 if(checkBottomLeft(sym,x+1,y-1)){
-        //                     okCount++;
-        //                 }
-        //                 debugger;
-        //             }
-        //             //check right
-        //             else if(boardArray[y][x+1]===null){
-        //                 if(checkLeftRight(sym,x+1,y)){
-        //                     okCount++;
-        //                 }
-        //                 debugger;
-        //             }
-        //             //check bottom right
-        //             else if(boardArray[y+1][x+1]===null){
-        //                 if(checkTopLeft(sym,x+1,y+1)){
-        //                     okCount++;
-        //                 }
-        //                 debugger;
-        //             }
-        //             //check bottom
-        //             else if(boardArray[y+1][x]===null){
-        //                 if(checkTop(sym,x,y+1)){
-        //                     okCount++;
-        //                 }
-        //                 debugger;
-        //             }
-        //             //check bottom left
-        //             else if(boardArray[y+1][x-1]===null){
-        //                 if(checkTopRight(sym,x-1,y+1)){
-        //                     okCount++;
-        //                 }
-        //                 debugger;
-        //             }
-        //             //check left
-        //             else if(boardArray[y][x-1]===null){
-        //                 if(checkRight(sym,x-1,y)){
-        //                     okCount++;
-        //                 }
-        //                 debugger;
-        //             }
-        //         }else{
-        //             continue;
-        //         }
-        //         debugger;
-        //     }
-        // }
-        // if(okCount ===0){
-        //     console.log("No More");
-        // }else{
-        //     console.log("Still Ok")
-        // }
+    counter++;
+    getTarget.appendChild(aTile);
+    getTarget.removeEventListener("click",addTile);
+
+    var whiteCount = 0;
+    var blackCount = 0;
+
+    for(var i=0;i<boardLength;i++){
+        for(var j=0;j<boardLength;j++){
+
+            if(boardArray[i][j] === "W")
+                whiteCount += 1;
+            else if(boardArray[i][j] === "B")
+                blackCount +=1;
+
+        }
+    }
 
 
-// }
+    blackScore.innerHTML = blackCount;
+    whiteScore.innerHTML = whiteCount;
 
+    var getSym = counter%2===0? "W":"B"
+    console.log(getSym + "turn");
+    for(var y=0;y<boardLength;y++){
+        for(var x=0;x<boardLength;x++){
+            if(boardArray[y][x]===null){
+                if(checkOKtoPlace(getSym,x,y)){
+                    roughtCount++;
+                }
+            }
+
+        }
+    }
+    if(roughtCount>0){
+        console.log(getSym + "still can");
+    }else{
+        console.log(getSym+ "cannot d");
+    }
+
+
+
+}
+
+var accumulator = function(arr,sym,x,y){
+    var topLeftSettle = false;
+    var topSettle = false;
+    var topRightSettle = false;
+    var rightSettle = false;
+    var bottomRightSettle = false;
+    var bottomSettle = false;
+    var bottomLeftSettle = false;
+    var leftSettle = false;
+    var totalChanged = 0;
+
+    for(i=0;i<boardLength;i++){
+        switch (i){
+            case 0:
+                if(directionToGo[i]){
+                    while(!topLeftSettle){
+                        if(boardArray[y-1][x-1]!==null){
+                            var i=1;
+                            while(boardArray[y-i][x-i]!==sym){
+                                totalChanged++;
+                                i++;
+                            }
+                            topLeftSettle = true;
+
+                        }else{
+                            topLeftSettle = true;
+                        }
+                    }
+                }
+                break;
+            case 1:
+                if(directionToGo[i]){
+                    while(!topSettle){
+                        if(boardArray[y-1][x]!==null){
+                            var i=1;
+                            while(boardArray[y-i][x]!==sym){
+                                totalChanged++;
+                                i++;
+                            }
+                            topSettle = true;
+
+                        }else{
+                            topSettle = true;
+                        }
+                    }
+                }
+                break;
+            case 2:
+                if(directionToGo[i]){
+                    while(!topRightSettle){
+                        if(boardArray[y-1][x+1]!==null){
+                            var i=1;
+                            while(boardArray[y-i][x+i]!==sym){
+                                totalChanged++;
+                                i++;
+                            }
+                            topRightSettle = true;
+
+                        }else{
+                            topRightSettle = true;
+                        }
+                    }
+
+                }
+                break;
+            case 3:
+                if(directionToGo[i]){
+                     while(!rightSettle){
+                        if(boardArray[y][x+1]!==null){
+                            var i=1;
+                            while(boardArray[y][x+i]!==sym){
+                                totalChanged++;
+                                i++;
+                            }
+                            rightSettle = true;
+
+                        }else{
+                            rightSettle = true;
+                        }
+                    }
+                }
+                break;
+            case 4:
+                if(directionToGo[i]){
+                    while(!bottomRightSettle){
+                        if(boardArray[y+1][x+1]!==null){
+                            var i=1;
+                            while(boardArray[y+i][x+i]!==sym){
+
+                                totalChanged++;
+                                i++;
+                            }
+                            bottomRightSettle = true;
+
+                        }else{
+                            bottomRightSettle = true;
+                        }
+                    }
+
+                }
+                break;
+            case 5:
+                if(directionToGo[i]){
+                    while(!bottomSettle){
+                        if(boardArray[y+1][x]!==null){
+                            var i=1;
+                            while(boardArray[y+i][x]!==sym){
+
+                                totalChanged++;
+                                i++;
+                            }
+                            bottomSettle = true;
+
+                        }else{
+                            bottomSettle = true;
+                        }
+                    }
+
+                }
+                break;
+            case 6:
+                if(directionToGo[i]){
+                    while(!bottomLeftSettle){
+                        if(boardArray[y+1][x-1]!==null){
+                            var i=1;
+                            while(boardArray[y+i][x-i]!==sym){
+                                totalChanged++;
+                                i++;
+                            }
+                            bottomLeftSettle = true;
+
+                        }else{
+                            bottomLeftSettle = true;
+                        }
+                    }
+
+                }
+                break;
+            case 7:
+                if(directionToGo[i]){
+                    while(!leftSettle){
+                        if(boardArray[y][x-1]!==null){
+                            var i=1;
+                            while(boardArray[y][x-i]!==sym){
+                                totalChanged++;
+                                i++;
+                            }
+                            leftSettle = true;
+
+                        }else{
+                            leftSettle = true;
+                        }
+                    }
+
+                }
+                break;
+        }
+    }
+
+    arr.push({"x-axis" : x ,"y-axis" : y, total:totalChanged});
+
+
+}
 
 
 document.addEventListener("DOMContentLoaded",function(){
