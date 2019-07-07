@@ -47,67 +47,69 @@ var addTile = function(event) {
         event.target.appendChild(aTile);
         event.target.removeEventListener("click", addTile);
         // event.target.removeEventListener("click", tilePlaceSound);
+
+
+
+        ////////////////////////////////////////////////////////////
+        ///////////     Do Tiles Counting           ///////////////
+        ////////////////////////////////////////////////////////////
+        var whiteCount = 0;
+        var blackCount = 0;
+        for (var i = 0; i < boardLength; i++) {
+            for (var j = 0; j < boardLength; j++) {
+
+                if (boardArray[i][j] === "W")
+                    whiteCount += 1;
+                else if (boardArray[i][j] === "B")
+                    blackCount += 1;
+
+            }
+        }
+        blackScore.innerHTML = blackCount;
+        whiteScore.innerHTML = whiteCount;
+        ////////////////////////////////////////////////////////
+
+
+        //check any move left///////////////////////////
+        //updated getSym as next sym to play//////////
+        var getSym = counter % 2 === 0 ? "W" : "B"
+        console.log(getSym + "turn");
+        for (var y = 0; y < boardLength; y++) {
+            for (var x = 0; x < boardLength; x++) {
+                if (boardArray[y][x] === null) {
+                    if (checkOKtoPlace(getSym, x, y)) {
+                        roughtCount++;
+                    }
+                }
+
+            }
+        }
+        if (roughtCount > 0) {
+            console.log(getSym + "still can");
+            glowchange(getSym);
+            if (singlePlayerMode) {
+                tempStopAllClicks();
+            }
+        } else {
+            console.log(getSym + "cannot d");
+            stopGlow1();
+            stopGlow2();
+            botMode = false;
+            tempStopAllClicks();
+        }
+        ///////////////////////////////////////////////////
+
+
+
+        //bot mode on and off
+        if (botMode) {
+            debugger;
+            setTimeout(aiTurn, 3000);
+        }
+
     } else {
         console.log("Invalid Move")
     }
-
-
-    ////////////////////////////////////////////////////////////
-    ///////////     Do Tiles Counting           ///////////////
-    ////////////////////////////////////////////////////////////
-    var whiteCount = 0;
-    var blackCount = 0;
-    for (var i = 0; i < boardLength; i++) {
-        for (var j = 0; j < boardLength; j++) {
-
-            if (boardArray[i][j] === "W")
-                whiteCount += 1;
-            else if (boardArray[i][j] === "B")
-                blackCount += 1;
-
-        }
-    }
-    blackScore.innerHTML = blackCount;
-    whiteScore.innerHTML = whiteCount;
-    ////////////////////////////////////////////////////////
-
-
-    //check any move left///////////////////////////
-    //updated getSym as next sym to play//////////
-    var getSym = counter % 2 === 0 ? "W" : "B"
-    console.log(getSym + "turn");
-    for (var y = 0; y < boardLength; y++) {
-        for (var x = 0; x < boardLength; x++) {
-            if (boardArray[y][x] === null) {
-                if (checkOKtoPlace(getSym, x, y)) {
-                    roughtCount++;
-                }
-            }
-
-        }
-    }
-    if (roughtCount > 0) {
-        console.log(getSym + "still can");
-        glowchange(getSym);
-        if (singlePlayerMode) {
-            tempStopAllClicks();
-        }
-    } else {
-        console.log(getSym + "cannot d");
-        stopGlow1();
-        stopGlow2();
-        botMode = false;
-        tempStopAllClicks();
-    }
-    ///////////////////////////////////////////////////
-
-
-
-    //bot mode on and off
-    if (botMode) {
-        setTimeout(aiTurn, 3000);
-    }
-
 
 }
 

@@ -92,7 +92,20 @@ body{
     margin:0;
     color: yellow;
     text-align:center;
-    text-shadow: 6px 6px 6px black;
+    text-shadow: 1px 1px 1px #7f7f00,
+        1px 2px 1px #7f7f00,
+        1px 3px 1px #7f7f00,
+        1px 4px 1px #7f7f00,
+        1px 5px 1px #7f7f00,
+        1px 6px 1px #7f7f00,
+        1px 7px 1px #7f7f00,
+        1px 8px 1px #7f7f00,
+        1px 9px 1px #7f7f00,
+        1px 10px 1px #7f7f00,
+    1px 18px 6px rgba(16,16,16,0.4),
+    1px 22px 10px rgba(16,16,16,0.2),
+    1px 25px 35px rgba(16,16,16,0.2),
+    1px 30px 60px rgba(16,16,16,0.4);
 }
 
 .score-container{
@@ -336,6 +349,7 @@ border-bottom:4px solid #8e7400;
 .selections:hover{
 
     color:white;
+    text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff;
 
 }
 
