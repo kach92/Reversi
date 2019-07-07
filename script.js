@@ -44,6 +44,7 @@ var addTile = function(event) {
         counter++;
         event.target.appendChild(aTile);
         event.target.removeEventListener("click", addTile);
+        event.target.removeEventListener("click", tilePlaceSound);
     } else {
         console.log("Invalid Move")
     }
@@ -183,6 +184,7 @@ var initialize = function() {
         }
         getSquare.appendChild(aTile);
         getSquare.removeEventListener("click", addTile);
+        getSquare.removeEventListener("click", tilePlaceSound);
         aCounter++;
     }
 
@@ -663,6 +665,7 @@ var aiTurn = function() {
         counter++;
         getTarget.appendChild(aTile);
         getTarget.removeEventListener("click", addTile);
+        getTarget.removeEventListener("click", tilePlaceSound);
         ////////////////////////////////////////////////////////////////////////////
 
 
@@ -891,14 +894,8 @@ var accumulator = function(arr, sym, x, y) {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////                                      //////////////////////
-//////////////////////    DOCUMENT ON LOAD                    //////////////////////
-//////////////////////                                             //////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
 
-
-document.addEventListener("DOMContentLoaded", function() {
+var allBoardInitialisation = function() {
     createBoard();
     var k = 0;
     var getSquares = document.querySelectorAll(".col");
@@ -908,20 +905,23 @@ document.addEventListener("DOMContentLoaded", function() {
             getSquares[k].setAttribute("y-axis", i);
             getSquares[k].setAttribute("id", k);
             getSquares[k].addEventListener("click", addTile)
+            getSquares[k].addEventListener("click", tilePlaceSound)
             k++;
         }
     }
     createBoardArray();
     initialize();
+    document.querySelector(".score-container").style.visibility = "visible";
 
     if (demo) {
         dualBotMode = setInterval(aiTurn, 3000);
         botMode = true;
     }
+}
 
-
-
-})
+var tilePlaceSound = function() {
+    place.play();
+}
 
 var createBoard = function() {
     var container = document.querySelector(".main-container");
@@ -952,3 +952,16 @@ var createBoard = function() {
 
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////                                      //////////////////////
+//////////////////////    DOCUMENT ON LOAD                    //////////////////////
+//////////////////////                                             //////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+document.getE
+
+})

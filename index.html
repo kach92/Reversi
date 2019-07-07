@@ -5,10 +5,22 @@
     <link href="https://fonts.googleapis.com/css?family=Leckerli+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        var beep = new Audio();
+        var place = new Audio();
+        beep.src = "audio/Mouse-Click-01-c-FesliyanStudios.com.mp3";
+        place.src = "audio/button-16.mp3"
+    </script>
+
 </head>
 <body>
     <div class="header">Reversi</div>
     <div class="main-container">
+        <dir class="main-page-container">
+            <button class="selections" onmousedown="beep.play()" id="single-player">Single Player</button>
+            <button class="selections" onmousedown="beep.play()"id="2-players">2 Players</button>
+            <button class="selections" onmousedown="beep.play()"id="demo">Demo</button>
+        </dir>
 
     </div>
 
