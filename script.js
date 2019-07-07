@@ -8,6 +8,7 @@ var demo = false;
 var dualBotMode = null;
 var botTurn = false;
 var singlePlayerMode = false;
+var predictorArray = [];
 
 
 var blackScore = document.getElementById("black-score");
@@ -30,7 +31,9 @@ var addTile = function(event) {
 
 
 
+
     if (checkOKtoPlace(getSym, getX, getY)) {
+        removePredictionDots();
         var aTile = document.createElement("div");
 
         if (getSym === "W") {
@@ -72,7 +75,7 @@ var addTile = function(event) {
 
         //check any move left///////////////////////////
         //updated getSym as next sym to play//////////
-        var getSym = counter % 2 === 0 ? "W" : "B"
+        getSym = counter % 2 === 0 ? "W" : "B"
         console.log(getSym + "turn");
         for (var y = 0; y < boardLength; y++) {
             for (var x = 0; x < boardLength; x++) {
@@ -89,7 +92,10 @@ var addTile = function(event) {
             glowchange(getSym);
             if (singlePlayerMode) {
                 tempStopAllClicks();
+            }else{
+                predictionDots(getSym);
             }
+
         } else {
             console.log(getSym + "cannot d");
             stopGlow1();
@@ -103,14 +109,43 @@ var addTile = function(event) {
 
         //bot mode on and off
         if (botMode) {
-            debugger;
+
             setTimeout(aiTurn, 3000);
         }
 
     } else {
         console.log("Invalid Move")
+        invalid.play();
     }
 
+}
+
+var predictionDots = function(sym){
+    predictorArray = [];
+    for (var y = 0; y < boardLength; y++) {
+        for (var x = 0; x < boardLength; x++) {
+            if (boardArray[y][x] === null) {
+                if (checkOKtoPlace(sym, x, y)) {
+                    var createPredictor = document.createElement("div");
+                    createPredictor.setAttribute("class","predictor");
+                    createPredictor.setAttribute("x-axis", x);
+                    createPredictor.setAttribute("y-axis", y);
+                    createPredictor.setAttribute("onclick","event.stopPropagation()");
+                    var id = y*boardLength+x;
+                    document.getElementById(id).appendChild(createPredictor);
+                    predictorArray.push(id);
+                }
+            }
+
+        }
+    }
+}
+
+var removePredictionDots = function(sym){
+    for(var i=0;i<predictorArray.length;i++){
+        var target = document.getElementById(predictorArray[i]);
+        target.removeChild(target.firstChild);
+    }
 }
 
 
@@ -707,7 +742,7 @@ var aiTurn = function() {
 
 
         /////////Check anymore playable empty square
-        var getSym = counter % 2 === 0 ? "W" : "B"
+        getSym = counter % 2 === 0 ? "W" : "B"
         console.log(getSym + "turn");
         for (var y = 0; y < boardLength; y++) {
             for (var x = 0; x < boardLength; x++) {
@@ -725,6 +760,7 @@ var aiTurn = function() {
             glowchange(getSym);
             if (singlePlayerMode) {
                 startBackAllClicks();
+                predictionDots(getSym);
             }
 
 
@@ -975,40 +1011,13 @@ var createBoard = function() {
         }
         boardContainer.appendChild(row);
     }
-    boardFrame.appendChild(boardContainer)
+    boardFrame.appendChild(boardContainer);
     container.appendChild(boardFrame);
 
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////                                      //////////////////////
-//////////////////////    DOCUMENT ON LOAD                    //////////////////////
-//////////////////////                                             //////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
 
-
-document.addEventListener("DOMContentLoaded", function() {
-
-    document.getElementById("single-player").addEventListener("click", function() {
-        clearMainPageContainer();
-        askPlayerInfoContainer("single");
-
-    })
-
-    document.getElementById("2-players").addEventListener("click", function() {
-        clearMainPageContainer();
-        askPlayerInfoContainer("2");
-    })
-
-    document.getElementById("demo").addEventListener("click", function() {
-        clearMainPageContainer();
-        setTimeout(preStartGame("demo"), 100);
-    })
-
-
-
-})
 
 var askPlayerInfoContainer = function(mode) {
     var mainPageContainer = document.querySelector(".main-page-container")
@@ -1089,6 +1098,8 @@ var preStartGame = function(mode) {
             botMode = true;
             removeMainPageContainer();
             allBoardInitialisation();
+            var getSym = counter % 2 === 0 ? "W" : "B"
+            predictionDots(getSym);
         } else if (mode === "2") {
 
             var takeName1 = document.getElementById("player-1-input").value;
@@ -1107,6 +1118,8 @@ var preStartGame = function(mode) {
             }
             removeMainPageContainer();
             allBoardInitialisation();
+            var getSym = counter % 2 === 0 ? "W" : "B"
+            predictionDots(getSym);
         } else if (mode === "demo") {
             demo = true;
             removeMainPageContainer();
@@ -1137,3 +1150,32 @@ var startBackAllClicks = function() {
     }
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////                                      //////////////////////
+//////////////////////    DOCUMENT ON LOAD                    //////////////////////
+//////////////////////                                             //////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    document.getElementById("single-player").addEventListener("click", function() {
+        clearMainPageContainer();
+        askPlayerInfoContainer("single");
+
+    })
+
+    document.getElementById("2-players").addEventListener("click", function() {
+        clearMainPageContainer();
+        askPlayerInfoContainer("2");
+    })
+
+    document.getElementById("demo").addEventListener("click", function() {
+        clearMainPageContainer();
+        setTimeout(preStartGame("demo"), 100);
+    })
+
+
+
+})

@@ -92,16 +92,16 @@ body{
     margin:0;
     color: yellow;
     text-align:center;
-    text-shadow: 1px 1px 1px #7f7f00,
-        1px 2px 1px #7f7f00,
-        1px 3px 1px #7f7f00,
-        1px 4px 1px #7f7f00,
-        1px 5px 1px #7f7f00,
-        1px 6px 1px #7f7f00,
-        1px 7px 1px #7f7f00,
-        1px 8px 1px #7f7f00,
-        1px 9px 1px #7f7f00,
-        1px 10px 1px #7f7f00,
+    text-shadow: 1px 1px 1px #4f4f00,
+        1px 2px 1px #4f4f00,
+        1px 3px 1px #4f4f00,
+        1px 4px 1px #4f4f00,
+        1px 5px 1px #4f4f00,
+        1px 6px 1px #4f4f00,
+        1px 7px 1px #4f4f00,
+        1px 8px 1px #4f4f00,
+        1px 9px 1px #4f4f00,
+        1px 10px 1px #4f4f00,
     1px 18px 6px rgba(16,16,16,0.4),
     1px 22px 10px rgba(16,16,16,0.2),
     1px 25px 35px rgba(16,16,16,0.2),
@@ -152,9 +152,9 @@ body{
 .score-black:after{
     content:"";
     position:absolute;
-    top:8px;
+    top:6px;
     border-radius:50%;
-    left:4px;
+    left:3px;
     width:56%;
     height:35%;
     background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0));
@@ -172,9 +172,9 @@ body{
 .score-white::after{
     content:"";
     position:absolute;
-    top:8px;
+    top:6px;
     border-radius:50%;
-    left:4px;
+    left:3px;
     width:56%;
     height:35%;
     background: linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0));
@@ -214,15 +214,15 @@ body{
     text-align:center;
     box-sizing: border-box;
     border:1px solid black;
-    width:65%;
+    width:250px;
     border-radius:22px;
     padding:8px;
     color:white;
     font-weight:bold;
-    font-size:16px;
+    font-size:19px;
     background: linear-gradient(to bottom ,#0421A4, #21B7F2);
     position:relative;
-    height:35px;
+    height:37px;
     box-shadow: 2px 2px 3px black;
 }
 
@@ -392,5 +392,21 @@ border-bottom:4px solid #8e7400;
     font-size:22px;
     color:red;
     box-sizing: border-box;
+}
+
+.predictor{
+    border:1px solid black;
+    width:7px;
+    height:7px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background-color:grey;
+}
+
+.square{
+    position:relative;
 }
 
