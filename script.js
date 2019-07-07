@@ -6,6 +6,8 @@ var directionToGo = [];
 var botMode = false;
 var demo = false;
 var dualBotMode = null;
+var botTurn = false;
+var singlePlayerMode = false;
 
 
 var blackScore = document.getElementById("black-score");
@@ -40,11 +42,11 @@ var addTile = function(event) {
             boardArray[getY][getX] = getSym;
         }
         changeRespectiveTiles(event.target, getSym, getX, getY);
-
+        tilePlaceSound();
         counter++;
         event.target.appendChild(aTile);
         event.target.removeEventListener("click", addTile);
-        event.target.removeEventListener("click", tilePlaceSound);
+        // event.target.removeEventListener("click", tilePlaceSound);
     } else {
         console.log("Invalid Move")
     }
@@ -87,11 +89,15 @@ var addTile = function(event) {
     if (roughtCount > 0) {
         console.log(getSym + "still can");
         glowchange(getSym);
+        if (singlePlayerMode) {
+            tempStopAllClicks();
+        }
     } else {
         console.log(getSym + "cannot d");
         stopGlow1();
         stopGlow2();
         botMode = false;
+        tempStopAllClicks();
     }
     ///////////////////////////////////////////////////
 
@@ -166,6 +172,7 @@ var initialize = function() {
         }
         getSquare.appendChild(aTile);
         getSquare.removeEventListener("click", addTile);
+        // getSquare.removeEventListener("click", tilePlaceSound);
         aCounter++;
     }
     for (var i = secondTileId; i > secondTileId - 2; i--) {
@@ -184,7 +191,7 @@ var initialize = function() {
         }
         getSquare.appendChild(aTile);
         getSquare.removeEventListener("click", addTile);
-        getSquare.removeEventListener("click", tilePlaceSound);
+        // getSquare.removeEventListener("click", tilePlaceSound);
         aCounter++;
     }
 
@@ -208,7 +215,9 @@ var checkTopLeft = function(sym, x, y) {
     if (x < 2 || y < 2) {
         return false;
     } else {
+
         if (boardArray[y - 1][x - 1] !== null) {
+
             if (boardArray[y - 1][x - 1] !== sym) {
                 var minCount = Math.min(x, y) + 1;
                 for (i = 2; i < minCount; i++) {
@@ -608,6 +617,9 @@ var changeRespectiveTiles = function(target, sym, x, y) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 var aiTurn = function() {
+
+
+
     if (botMode) {
         var getSym = counter % 2 === 0 ? "W" : "B"
         var objArray = [];
@@ -620,8 +632,11 @@ var aiTurn = function() {
         for (var y = 0; y < boardLength; y++) {
             for (var x = 0; x < boardLength; x++) {
                 if (boardArray[y][x] === null) {
+
                     if (checkOKtoPlace(getSym, x, y)) {
+
                         accumulator(objArray, getSym, x, y);
+
                     }
                 }
 
@@ -642,9 +657,9 @@ var aiTurn = function() {
 
             }
         }
-        var theOne = Math.floor(Math.random() * randomArray.length)
+        var theOne = randomArray[Math.floor(Math.random() * randomArray.length)];
         getX = theOne["x-axis"];
-        getY = theOne["y-axis"];
+        getY = theOne["y-axis"];;
         ///////////////////////////////////////////////////////////////////////////////////
 
 
@@ -661,7 +676,7 @@ var aiTurn = function() {
             boardArray[getY][getX] = getSym;
         }
         changeRespectiveTiles(getTarget, getSym, getX, getY);
-
+        tilePlaceSound();
         counter++;
         getTarget.appendChild(aTile);
         getTarget.removeEventListener("click", addTile);
@@ -706,6 +721,11 @@ var aiTurn = function() {
         if (roughtCount > 0) {
             console.log(getSym + "still can");
             glowchange(getSym);
+            if (singlePlayerMode) {
+                startBackAllClicks();
+            }
+
+
         } else {
             console.log(getSym + "cannot d");
             stopGlow1();
@@ -895,7 +915,7 @@ var accumulator = function(arr, sym, x, y) {
 }
 
 
-var allBoardInitialisation = function() {
+var allBoardInitialisation = function(noclick = false) {
     createBoard();
     var k = 0;
     var getSquares = document.querySelectorAll(".col");
@@ -904,8 +924,14 @@ var allBoardInitialisation = function() {
             getSquares[k].setAttribute("x-axis", j);
             getSquares[k].setAttribute("y-axis", i);
             getSquares[k].setAttribute("id", k);
-            getSquares[k].addEventListener("click", addTile)
-            getSquares[k].addEventListener("click", tilePlaceSound)
+
+            if (demo) {
+                console.log("no clicking");
+            } else {
+                getSquares[k].addEventListener("click", addTile);
+            }
+
+            // getSquares[k].addEventListener("click", tilePlaceSound)
             k++;
         }
     }
@@ -962,6 +988,150 @@ var createBoard = function() {
 
 document.addEventListener("DOMContentLoaded", function() {
 
-document.getE
+    document.getElementById("single-player").addEventListener("click", function() {
+        clearMainPageContainer();
+        askPlayerInfoContainer("single");
+
+    })
+
+    document.getElementById("2-players").addEventListener("click", function() {
+        clearMainPageContainer();
+        askPlayerInfoContainer("2");
+    })
+
+    document.getElementById("demo").addEventListener("click", function() {
+        clearMainPageContainer();
+        setTimeout(preStartGame("demo"), 100);
+    })
+
+
 
 })
+
+var askPlayerInfoContainer = function(mode) {
+    var mainPageContainer = document.querySelector(".main-page-container")
+
+    var player1 = document.createElement("div");
+    player1.innerHTML = "Player 1";
+    player1.setAttribute("class", "name main-player");
+
+    var player1Input = document.createElement("input");
+    player1Input.setAttribute("type", "text");
+    player1Input.setAttribute("id", "player-1-input");
+
+    var playerInputContainer = document.createElement("div");
+    playerInputContainer.setAttribute("class", "player-input-container");
+    playerInputContainer.appendChild(player1);
+    playerInputContainer.appendChild(player1Input);
+
+    mainPageContainer.appendChild(playerInputContainer);
+
+
+
+    if (mode === "2") {
+        var player2 = document.createElement("div");
+        player2.innerHTML = "Player 2";
+        player2.setAttribute("class", "name main-player player2");
+
+        var player2Input = document.createElement("input");
+        player2Input.setAttribute("type", "text");
+        player2Input.setAttribute("id", "player-2-input");
+
+        var playerInputContainer2 = document.createElement("div");
+        playerInputContainer2.setAttribute("class", "player-input-container");
+        playerInputContainer2.appendChild(player2);
+        playerInputContainer2.appendChild(player2Input);
+
+        mainPageContainer.appendChild(playerInputContainer2);
+
+    }
+
+    var startGameButton = document.createElement("div");
+    startGameButton.setAttribute("class", "selections");
+    startGameButton.setAttribute("onmousedown", "beep.play()");
+    startGameButton.setAttribute("id", "start-game");
+    startGameButton.innerHTML = "Start Game";
+    startGameButton.addEventListener("click", preStartGame(mode));
+    mainPageContainer.appendChild(startGameButton);
+}
+
+var clearMainPageContainer = function() {
+    var mainPageContainer = document.querySelector(".main-page-container")
+    while (mainPageContainer.firstChild) {
+        mainPageContainer.removeChild(mainPageContainer.firstChild);
+
+    }
+}
+
+var removeMainPageContainer = function() {
+    var mainContainer = document.querySelector(".main-container")
+    while (mainContainer.firstChild) {
+        mainContainer.removeChild(mainContainer.firstChild);
+    }
+}
+
+var preStartGame = function(mode) {
+
+    return function() {
+
+        if (mode === "single") {
+            singlePlayerMode = true;
+
+            var takeName1 = document.getElementById("player-1-input").value;
+
+            if (takeName1 === "") {
+                document.getElementById("player-name").innerHTML = "Guest-1"
+            } else {
+                document.getElementById("player-name").innerHTML = takeName1;
+            }
+            botMode = true;
+            removeMainPageContainer();
+            allBoardInitialisation();
+        } else if (mode === "2") {
+
+            var takeName1 = document.getElementById("player-1-input").value;
+            var takeName2 = document.getElementById("player-2-input").value;
+
+            if (takeName1 === "") {
+                document.getElementById("player-name").innerHTML = "Guest-1"
+            } else {
+                document.getElementById("player-name").innerHTML = takeName1;
+            }
+
+            if (takeName2 === "") {
+                document.getElementById("bot-name").innerHTML = "Guest-2"
+            } else {
+                document.getElementById("bot-name").innerHTML = takeName2;
+            }
+            removeMainPageContainer();
+            allBoardInitialisation();
+        } else if (mode === "demo") {
+            demo = true;
+            removeMainPageContainer();
+            allBoardInitialisation();
+        }
+    }
+}
+
+var tempStopAllClicks = function() {
+    for (var y = 0; y < boardLength; y++) {
+        for (var x = 0; x < boardLength; x++) {
+            if (boardArray[y][x] === null) {
+                document.getElementById(y * boardLength + x).removeEventListener("click", addTile);
+            }
+
+        }
+    }
+}
+
+var startBackAllClicks = function() {
+    for (var y = 0; y < boardLength; y++) {
+        for (var x = 0; x < boardLength; x++) {
+            if (boardArray[y][x] === null) {
+                document.getElementById(y * boardLength + x).addEventListener("click", addTile);
+            }
+
+        }
+    }
+
+}
