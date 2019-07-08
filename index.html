@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Othello</title>
+    <title>Reversi</title>
     <link href="https://fonts.googleapis.com/css?family=Leckerli+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -16,53 +16,68 @@
 
 </head>
 <body>
-    <div class="header">Othello</div>
-    <div class="main-container">
-        <dir class="main-page-container">
-            <button class="selections" onmousedown="beep.play()" id="single-player">Single Player</button>
-            <button class="selections" onmousedown="beep.play()"id="2-players">2 Players</button>
-            <button class="selections" onmousedown="beep.play()"id="demo">Demo</button>
-        </dir>
-
-    </div>
-
-
-    <div class="score-container">
-        <div class="score-inner-container">
-            <div class="name" id="player-name">AI</div>
-            <div class="tile-container">
-                <div class="glow" id="glow-1">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-
-                </div>
-                <div class="score-tile score-black">
-                    <div class="score" id="black-score">2</div>
-                </div>
-            </div>
-
+    <!-- <embed name="GoodEnough" volume="0.05" src="audio/Your Lie in April OST - Again.mp3" loop="true" hidden="true" autostart="true"> -->
+        <audio volume="0.1" loop autoplay hidden>
+          <source src="audio/Ryuichi Sakamoto  Merry Christmas, Mr. Lawrence (Piano Cover).mp3" type="audio/mpeg">
+          </audio>
+          <div class="header">Reversi</div>
+          <div class="main-container">
+            <dir class="main-page-container">
+                <button class="selections" onmousedown="beep.play()" id="single-player">Single Player</button>
+                <button class="selections" onmousedown="beep.play()"id="2-players">2 Players</button>
+                <button class="selections" onmousedown="beep.play()"id="demo">Demo</button>
+            </dir>
 
         </div>
-        <div class="score-inner-container">
-            <div class="name" id="bot-name">AI</div>
-            <div class="tile-container">
-                <div class="glow" id="glow-2">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
 
+
+        <div class="score-container">
+            <div class="score-inner-container">
+                <div class="name" id="player-name">AI - Black</div>
+                <div class="tile-container">
+                    <div class="glow" id="glow-1">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+                    <div class="score-tile score-black">
+                        <div class="score" id="black-score">2</div>
+                    </div>
                 </div>
-                <div class="score-tile score-white">
-                    <div class="score" id="white-score">2</div>
+
+
+            </div>
+            <div class="score-inner-container">
+                <div class="name" id="bot-name">AI - White</div>
+                <div class="tile-container">
+                    <div class="glow" id="glow-2">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+                    <div class="score-tile score-white">
+                        <div class="score" id="white-score">2</div>
+                    </div>
                 </div>
+
+            </div>
+        </div>
+
+        <div class="dark-shroud">
+            <div class="win-lose-draw">You Win!</div>
+            <div class="result-container">
+                <button class="name result-selections" id="stay" onmousedown="beep.play()" onclick="takeOffShroud()">Stay</button>
+                <button class="name result-selections" id="restart" onmousedown="beep.play()" onclick="restart()">Restart</button>
+                <button class="name result-selections" id="menu" onmousedown="beep.play()" onclick="initAllBackToMainPage()">Menu</button>
             </div>
 
         </div>
-    </div>
+        <img onmousedown="beep.play()" class= "arrow"src="https://png.pngtree.com/svg/20160512/dc7ab8bb9c.svg" onclick="initAllBackToMainPage()">;
 
-    <script type="text/javascript" src="script.js"></script>
-</body>
-</html>
+        <script type="text/javascript" src="script.js"></script>
+    </body>
+    </html>

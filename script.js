@@ -9,6 +9,9 @@ var dualBotMode = null;
 var botTurn = false;
 var singlePlayerMode = false;
 var predictorArray = [];
+var mode = null;
+var player1Name = "AI - Black";
+var player2Name = "AI - White";
 
 
 var blackScore = document.getElementById("black-score");
@@ -28,7 +31,6 @@ var addTile = function(event) {
     var getY = parseInt(event.target.getAttribute("y-axis"));
     var getSym = counter % 2 === 0 ? "W" : "B"
     var roughtCount = 0;
-
 
 
 
@@ -92,7 +94,7 @@ var addTile = function(event) {
             glowchange(getSym);
             if (singlePlayerMode) {
                 tempStopAllClicks();
-            }else{
+            } else {
                 predictionDots(getSym);
             }
 
@@ -102,6 +104,7 @@ var addTile = function(event) {
             stopGlow2();
             botMode = false;
             tempStopAllClicks();
+            checkWin();
         }
         ///////////////////////////////////////////////////
 
@@ -120,18 +123,18 @@ var addTile = function(event) {
 
 }
 
-var predictionDots = function(sym){
+var predictionDots = function(sym) {
     predictorArray = [];
     for (var y = 0; y < boardLength; y++) {
         for (var x = 0; x < boardLength; x++) {
             if (boardArray[y][x] === null) {
                 if (checkOKtoPlace(sym, x, y)) {
                     var createPredictor = document.createElement("div");
-                    createPredictor.setAttribute("class","predictor");
+                    createPredictor.setAttribute("class", "predictor");
                     createPredictor.setAttribute("x-axis", x);
                     createPredictor.setAttribute("y-axis", y);
-                    createPredictor.setAttribute("onclick","event.stopPropagation()");
-                    var id = y*boardLength+x;
+                    createPredictor.setAttribute("onclick", "event.stopPropagation()");
+                    var id = y * boardLength + x;
                     document.getElementById(id).appendChild(createPredictor);
                     predictorArray.push(id);
                 }
@@ -141,8 +144,8 @@ var predictionDots = function(sym){
     }
 }
 
-var removePredictionDots = function(sym){
-    for(var i=0;i<predictorArray.length;i++){
+var removePredictionDots = function(sym) {
+    for (var i = 0; i < predictorArray.length; i++) {
         var target = document.getElementById(predictorArray[i]);
         target.removeChild(target.firstChild);
     }
@@ -769,6 +772,7 @@ var aiTurn = function() {
             stopGlow1();
             stopGlow2();
             botMode = false;
+            checkWin();
         }
     } else {
         if (demo) {
@@ -1084,7 +1088,7 @@ var removeMainPageContainer = function() {
 var preStartGame = function(mode) {
 
     return function() {
-
+        takeOffShroud();
         if (mode === "single") {
             singlePlayerMode = true;
 
@@ -1092,13 +1096,17 @@ var preStartGame = function(mode) {
 
             if (takeName1 === "") {
                 document.getElementById("player-name").innerHTML = "Guest-1"
+                player1Name = "Guest-1";
             } else {
                 document.getElementById("player-name").innerHTML = takeName1;
+                player1Name = takeName1;
             }
             botMode = true;
             removeMainPageContainer();
             allBoardInitialisation();
             var getSym = counter % 2 === 0 ? "W" : "B"
+            startGlow1();
+            stopGlow2();
             predictionDots(getSym);
         } else if (mode === "2") {
 
@@ -1107,23 +1115,31 @@ var preStartGame = function(mode) {
 
             if (takeName1 === "") {
                 document.getElementById("player-name").innerHTML = "Guest-1"
+                player1Name = "Guest-1";
             } else {
                 document.getElementById("player-name").innerHTML = takeName1;
+                player1Name = takeName1;
             }
 
             if (takeName2 === "") {
-                document.getElementById("bot-name").innerHTML = "Guest-2"
+                document.getElementById("bot-name").innerHTML = "Guest-2";
+                player2Name = "Guest-2";
             } else {
                 document.getElementById("bot-name").innerHTML = takeName2;
+                player2Name = takeName2;
             }
             removeMainPageContainer();
             allBoardInitialisation();
+            startGlow1();
+            stopGlow2();
             var getSym = counter % 2 === 0 ? "W" : "B"
             predictionDots(getSym);
         } else if (mode === "demo") {
             demo = true;
             removeMainPageContainer();
             allBoardInitialisation();
+            startGlow1();
+            stopGlow2();
         }
     }
 }
@@ -1151,29 +1167,159 @@ var startBackAllClicks = function() {
 
 }
 
+var checkWin = function() {
+    var getWinDisplay = document.querySelector(".win-lose-draw");
+    var getDarkShroud = document.querySelector(".dark-shroud");
+    var getResultContainer = document.querySelector(".resultContainer");
+
+    if (parseInt(blackScore.innerHTML) > parseInt(whiteScore.innerHTML)) {
+
+        getWinDisplay.innerHTML = `${player1Name} Win!`;
+        getDarkShroud.style.visibility = "visible";
+        // getWinDisplay.style.animation = "fadein 2s";
+
+    } else if (parseInt(blackScore.innerHTML) === parseInt(whiteScore.innerHTML)) {
+
+        getWinDisplay.innerHTML = "It is a Draw!!";
+        getDarkShroud.style.visibility = "visible";
+        // getWinDisplay.style.animation = "fadein 2s";
+        // getResultContainer.style.animation ="fadein 2s 2s forwards";
+    } else if (parseInt(blackScore.innerHTML) < parseInt(whiteScore.innerHTML)) {
+
+        getWinDisplay.innerHTML = `${player2Name} Win!`;
+        getDarkShroud.style.visibility = "visible";
+        // getWinDisplay.style.animation = "fadein 2s";
+        // getResultContainer.style.animation ="fadein 2s 2s forwards";
+    }
+}
+
+var takeOffShroud = function() {
+    document.querySelector(".dark-shroud").style.visibility = "hidden";
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////                                      //////////////////////
 //////////////////////    DOCUMENT ON LOAD                    //////////////////////
 //////////////////////                                             //////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
+var restart = function() {
+    takeOffShroud();
+    var mainContainer = document.querySelector(".main-container");
+    while (mainContainer.firstChild) {
+        mainContainer.removeChild(mainContainer.firstChild);
+    }
+    allBoardInitialisation();
+    counter = 1;
+    var getSym = counter % 2 === 0 ? "W" : "B"
+    blackScore.innerHTML = "2";
+    whiteScore.innerHTML = "2";
+    if (mode === "single") {
+        botMode = true;
+        var getSym = counter % 2 === 0 ? "W" : "B";
 
-document.addEventListener("DOMContentLoaded", function() {
+        allBoardInitialisation();
+        predictionDots(getSym);
+    } else if (mode === "2") {
+        var getSym = counter % 2 === 0 ? "W" : "B";
+
+        allBoardInitialisation();
+        predictionDots(getSym);
+
+    } else {
+        botMode = true;
+        demo = true;
+
+        allBoardInitialisation();
+    }
+
+
+}
+
+var initAllBackToMainPage = function() {
+    takeOffShroud();
+    stopGlow1();
+    stopGlow2();
+
+    var mainContainer = document.querySelector(".main-container");
+    while (mainContainer.firstChild) {
+        mainContainer.removeChild(mainContainer.firstChild);
+    }
+
+    botMode = false;
+    demo = false;
+    counter = 1;
+    document.querySelector(".score-container").style.visibility = "hidden";
+    blackScore.innerHTML = "2";
+    whiteScore.innerHTML = "2";
+
+    var mainPageContainer = document.createElement("div");
+    mainPageContainer.setAttribute("class", "main-page-container");
+    var button1 = document.createElement("button");
+    button1.setAttribute("class", "selections");
+    button1.setAttribute("onmousedown", "beep.play()");
+    button1.setAttribute("id", "single-player");
+    button1.innerHTML = "Single Player";
+
+    var button2 = document.createElement("button");
+    button2.setAttribute("class", "selections");
+    button2.setAttribute("onmousedown", "beep.play()");
+    button2.setAttribute("id", "2-players");
+    button2.innerHTML = "2 Players";
+
+    var button3 = document.createElement("button");
+    button3.setAttribute("class", "selections");
+    button3.setAttribute("onmousedown", "beep.play()");
+    button3.setAttribute("id", "demo");
+    button3.innerHTML = "Demo";
+
+    mainPageContainer.appendChild(button1);
+    mainPageContainer.appendChild(button2);
+    mainPageContainer.appendChild(button3);
+
+    mainContainer.appendChild(mainPageContainer);
+
 
     document.getElementById("single-player").addEventListener("click", function() {
         clearMainPageContainer();
-        askPlayerInfoContainer("single");
+        mode = "single"
+        askPlayerInfoContainer(mode);
 
     })
 
     document.getElementById("2-players").addEventListener("click", function() {
         clearMainPageContainer();
-        askPlayerInfoContainer("2");
+        mode = "2"
+        askPlayerInfoContainer(mode);
     })
 
     document.getElementById("demo").addEventListener("click", function() {
         clearMainPageContainer();
-        setTimeout(preStartGame("demo"), 100);
+        mode = "demo";
+        setTimeout(preStartGame(mode), 100);
+    })
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    document.getElementById("single-player").addEventListener("click", function() {
+        clearMainPageContainer();
+        mode = "single"
+        askPlayerInfoContainer(mode);
+
+    })
+
+    document.getElementById("2-players").addEventListener("click", function() {
+        clearMainPageContainer();
+        mode = "2"
+        askPlayerInfoContainer(mode);
+    })
+
+    document.getElementById("demo").addEventListener("click", function() {
+        clearMainPageContainer();
+        mode = "demo";
+        setTimeout(preStartGame(mode), 100);
     })
 
 

@@ -410,3 +410,110 @@ border-bottom:4px solid #8e7400;
     position:relative;
 }
 
+.dark-shroud{
+    position:absolute;
+    background-color: rgba(0,0,0,0.8);
+    border:1px solid black;
+    width:100%;
+    top:0;
+    left:0;
+    padding-bottom:100%;
+    visibility:hidden;
+
+
+}
+
+.result-container{
+    border: 1px solid white;
+    width: 386px;
+    height:264px;
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+
+    background: linear-gradient(to bottom ,#ff920b , #F5E49B);
+    border:none;
+    border-radius: 15px;
+
+
+}
+
+.result-selections{
+    box-shadow:6px 6px 6px black;
+    transition: all .05s linear;
+    border-bottom:4px solid #035b00;
+    outline:none;
+    background: linear-gradient(to bottom ,#035b00 , #84f280);
+
+
+}
+
+.result-selections:hover{
+    color:white;
+    text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff
+
+}
+
+.result-selections:active{
+    box-shadow: 2px 2px 2px black;
+    border-bottom:1px solid #8e7400;
+    transform: translateY(3px);
+}
+
+.win-lose-draw{
+    position:fixed;
+    left:50%;
+    top:20%;
+    transform:translate(-50%,-50%);
+    color:#00fff6;
+
+    width:100%;
+    text-align:center;
+    font-size:70px;
+    text-shadow: 1px 1px 1px #004f4b,
+        1px 2px 1px #004f4b,
+        1px 3px 1px #004f4b,
+        1px 4px 1px #004f4b,
+        1px 5px 1px #004f4b,
+        1px 6px 1px #004f4b,
+        1px 7px 1px #004f4b,
+        1px 8px 1px #004f4b,
+        1px 9px 1px #004f4b,
+        1px 10px 1px #004f4b,
+    1px 18px 6px rgba(16,16,16,0.4),
+    1px 22px 10px rgba(16,16,16,0.2),
+    1px 25px 35px rgba(16,16,16,0.2),
+    1px 30px 60px rgba(16,16,16,0.4);
+
+
+}
+
+@keyframes fadein{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+}
+
+.arrow{
+    width:40px;
+    height:40px;
+    position:absolute;
+    top:10px;
+    right:10px;
+    background-color:white;
+    border-radius:50%;
+}
+
+
