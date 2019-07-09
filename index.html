@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Reversi</title>
+    <link href="https://fonts.googleapis.com/css?family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Leckerli+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -16,11 +17,11 @@
 
 </head>
 <body>
-    <!-- <embed name="GoodEnough" volume="0.05" src="audio/Your Lie in April OST - Again.mp3" loop="true" hidden="true" autostart="true"> -->
-        <audio volume="0.1" loop autoplay hidden>
-          <source src="audio/Ryuichi Sakamoto  Merry Christmas, Mr. Lawrence (Piano Cover).mp3" type="audio/mpeg">
-          </audio>
-          <div class="header">Reversi</div>
+        <iframe src="audio/Ryuichi Sakamoto  Merry Christmas, Mr. Lawrence (Piano Cover).mp3" allow="autoplay" style="display:none" id="iframeAudio" >
+        </iframe>
+
+
+          <div class="header"><span class="black-letter">R</span><span class="white-letter">E</span><span class="black-letter">V</span><span class="white-letter">E</span><span class="black-letter">R</span><span class="white-letter">S</span><span class="black-letter">I</span></div>
           <div class="main-container">
             <dir class="main-page-container">
                 <button class="selections" onmousedown="beep.play()" id="single-player">Single Player</button>
@@ -76,7 +77,7 @@
             </div>
 
         </div>
-        <img onmousedown="beep.play()" class= "arrow"src="https://png.pngtree.com/svg/20160512/dc7ab8bb9c.svg" onclick="initAllBackToMainPage()">;
+        <img onmousedown="beep.play()" class= "settings"src="http://icons.iconarchive.com/icons/dtafalonso/android-l/128/Settings-L-icon.png" onclick="takeOutSettings()">
 
         <script type="text/javascript" src="script.js"></script>
     </body>

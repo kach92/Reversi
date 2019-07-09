@@ -14,6 +14,7 @@ var player1Name = "AI - Black";
 var player2Name = "AI - White";
 
 
+
 var blackScore = document.getElementById("black-score");
 var whiteScore = document.getElementById("white-score");
 
@@ -36,15 +37,18 @@ var addTile = function(event) {
 
     if (checkOKtoPlace(getSym, getX, getY)) {
         removePredictionDots();
-        var aTile = document.createElement("div");
 
+        var aTile = document.createElement("div");
+        event.target.classList.add("test");
         if (getSym === "W") {
             aTile.setAttribute("class", "white-tiles");
             boardArray[getY][getX] = getSym;
+            updateLastMove(getSym,getX,getY);
 
         } else {
             aTile.setAttribute("class", "black-tiles");
             boardArray[getY][getX] = getSym;
+            updateLastMove(getSym,getX,getY);
         }
         changeRespectiveTiles(event.target, getSym, getX, getY);
         tilePlaceSound();
@@ -206,6 +210,7 @@ var initialize = function() {
             aTile.setAttribute("class", "white-tiles");
             boardArray[getY][getX] = "W"
 
+
         } else {
             aTile.setAttribute("class", "black-tiles");
             boardArray[getY][getX] = "B"
@@ -240,7 +245,9 @@ var initialize = function() {
 var checkOKtoPlace = function(sym, x, y) {
 
     var arr = [checkTopLeft(sym, x, y), checkTop(sym, x, y), checkTopRight(sym, x, y), checkRight(sym, x, y), checkBottomRight(sym, x, y), checkBottom(sym, x, y), checkBottomLeft(sym, x, y), checkLeft(sym, x, y)];
+
     directionToGo = arr;
+
     if (arr.includes(true)) {
         return true
     } else {
@@ -470,19 +477,20 @@ var changeRespectiveTiles = function(target, sym, x, y) {
     var leftSettle = false;
 
     for (i = 0; i < boardLength; i++) {
+
         switch (i) {
             case 0:
                 if (directionToGo[i]) {
                     while (!topLeftSettle) {
                         if (boardArray[y - 1][x - 1] !== null) {
-                            var i = 1;
-                            while (boardArray[y - i][x - i] !== sym) {
-                                boardArray[y - i][x - i] = sym;
+                            var a = 1;
+                            while (boardArray[y - a][x - a] !== sym) {
+                                boardArray[y - a][x - a] = sym;
                                 if (sym === "W")
-                                    document.getElementById(boardLength * (y - i) + (x - i)).firstChild.setAttribute("class", "white-tiles");
+                                    document.getElementById(boardLength * (y - a) + (x - a)).firstChild.setAttribute("class", "white-tiles");
                                 else
-                                    document.getElementById(boardLength * (y - i) + (x - i)).firstChild.setAttribute("class", "black-tiles");
-                                i++;
+                                    document.getElementById(boardLength * (y - a) + (x - a)).firstChild.setAttribute("class", "black-tiles");
+                                a++;
                             }
                             topLeftSettle = true;
 
@@ -494,16 +502,17 @@ var changeRespectiveTiles = function(target, sym, x, y) {
                 break;
             case 1:
                 if (directionToGo[i]) {
+
                     while (!topSettle) {
                         if (boardArray[y - 1][x] !== null) {
-                            var i = 1;
-                            while (boardArray[y - i][x] !== sym) {
-                                boardArray[y - i][x] = sym;
+                            var a = 1;
+                            while (boardArray[y - a][x] !== sym) {
+                                boardArray[y - a][x] = sym;
                                 if (sym === "W")
-                                    document.getElementById(boardLength * (y - i) + x).firstChild.setAttribute("class", "white-tiles");
+                                    document.getElementById(boardLength * (y - a) + x).firstChild.setAttribute("class", "white-tiles");
                                 else
-                                    document.getElementById(boardLength * (y - i) + x).firstChild.setAttribute("class", "black-tiles");
-                                i++;
+                                    document.getElementById(boardLength * (y - a) + x).firstChild.setAttribute("class", "black-tiles");
+                                a++;
                             }
                             topSettle = true;
 
@@ -515,20 +524,27 @@ var changeRespectiveTiles = function(target, sym, x, y) {
                 break;
             case 2:
                 if (directionToGo[i]) {
+
                     while (!topRightSettle) {
+
                         if (boardArray[y - 1][x + 1] !== null) {
-                            var i = 1;
-                            while (boardArray[y - i][x + i] !== sym) {
-                                boardArray[y - i][x + i] = sym;
+
+                            var a = 1;
+                            while (boardArray[y - a][x + a] !== sym) {
+
+                                boardArray[y - a][x + a] = sym;
+
                                 if (sym === "W")
-                                    document.getElementById(boardLength * (y - i) + (x + i)).firstChild.setAttribute("class", "white-tiles");
+                                    document.getElementById(boardLength * (y - a) + (x + a)).firstChild.setAttribute("class", "white-tiles");
                                 else
-                                    document.getElementById(boardLength * (y - i) + (x + i)).firstChild.setAttribute("class", "black-tiles");
-                                i++;
+                                    document.getElementById(boardLength * (y - a) + (x + a)).firstChild.setAttribute("class", "black-tiles");
+                                a++;
                             }
+
                             topRightSettle = true;
 
                         } else {
+
                             topRightSettle = true;
                         }
                     }
@@ -539,14 +555,14 @@ var changeRespectiveTiles = function(target, sym, x, y) {
                 if (directionToGo[i]) {
                     while (!rightSettle) {
                         if (boardArray[y][x + 1] !== null) {
-                            var i = 1;
-                            while (boardArray[y][x + i] !== sym) {
-                                boardArray[y][x + i] = sym;
+                            var a = 1;
+                            while (boardArray[y][x + a] !== sym) {
+                                boardArray[y][x + a] = sym;
                                 if (sym === "W")
-                                    document.getElementById(boardLength * y + (x + i)).firstChild.setAttribute("class", "white-tiles");
+                                    document.getElementById(boardLength * y + (x + a)).firstChild.setAttribute("class", "white-tiles");
                                 else
-                                    document.getElementById(boardLength * y + (x + i)).firstChild.setAttribute("class", "black-tiles");
-                                i++;
+                                    document.getElementById(boardLength * y + (x + a)).firstChild.setAttribute("class", "black-tiles");
+                                a++;
                             }
                             rightSettle = true;
 
@@ -560,14 +576,14 @@ var changeRespectiveTiles = function(target, sym, x, y) {
                 if (directionToGo[i]) {
                     while (!bottomRightSettle) {
                         if (boardArray[y + 1][x + 1] !== null) {
-                            var i = 1;
-                            while (boardArray[y + i][x + i] !== sym) {
-                                boardArray[y + i][x + i] = sym;
+                            var a = 1;
+                            while (boardArray[y + a][x + a] !== sym) {
+                                boardArray[y + a][x + a] = sym;
                                 if (sym === "W")
-                                    document.getElementById(boardLength * (y + i) + (x + i)).firstChild.setAttribute("class", "white-tiles");
+                                    document.getElementById(boardLength * (y + a) + (x + a)).firstChild.setAttribute("class", "white-tiles");
                                 else
-                                    document.getElementById(boardLength * (y + i) + (x + i)).firstChild.setAttribute("class", "black-tiles");
-                                i++;
+                                    document.getElementById(boardLength * (y + a) + (x + a)).firstChild.setAttribute("class", "black-tiles");
+                                a++;
                             }
                             bottomRightSettle = true;
 
@@ -582,14 +598,14 @@ var changeRespectiveTiles = function(target, sym, x, y) {
                 if (directionToGo[i]) {
                     while (!bottomSettle) {
                         if (boardArray[y + 1][x] !== null) {
-                            var i = 1;
-                            while (boardArray[y + i][x] !== sym) {
-                                boardArray[y + i][x] = sym;
+                            var a = 1;
+                            while (boardArray[y + a][x] !== sym) {
+                                boardArray[y + a][x] = sym;
                                 if (sym === "W")
-                                    document.getElementById(boardLength * (y + i) + x).firstChild.setAttribute("class", "white-tiles");
+                                    document.getElementById(boardLength * (y + a) + x).firstChild.setAttribute("class", "white-tiles");
                                 else
-                                    document.getElementById(boardLength * (y + i) + x).firstChild.setAttribute("class", "black-tiles");
-                                i++;
+                                    document.getElementById(boardLength * (y + a) + x).firstChild.setAttribute("class", "black-tiles");
+                                a++;
                             }
                             bottomSettle = true;
 
@@ -605,14 +621,14 @@ var changeRespectiveTiles = function(target, sym, x, y) {
 
                     while (!bottomLeftSettle) {
                         if (boardArray[y + 1][x - 1] !== null) {
-                            var i = 1;
-                            while (boardArray[y + i][x - i] !== sym) {
-                                boardArray[y + i][x - i] = sym;
+                            var a = 1;
+                            while (boardArray[y + a][x - a] !== sym) {
+                                boardArray[y + a][x - a] = sym;
                                 if (sym === "W")
-                                    document.getElementById(boardLength * (y + i) + (x - i)).firstChild.setAttribute("class", "white-tiles");
+                                    document.getElementById(boardLength * (y + a) + (x - a)).firstChild.setAttribute("class", "white-tiles");
                                 else
-                                    document.getElementById(boardLength * (y + i) + (x - i)).firstChild.setAttribute("class", "black-tiles");
-                                i++;
+                                    document.getElementById(boardLength * (y + a) + (x - a)).firstChild.setAttribute("class", "black-tiles");
+                                a++;
                             }
                             bottomLeftSettle = true;
 
@@ -627,14 +643,14 @@ var changeRespectiveTiles = function(target, sym, x, y) {
                 if (directionToGo[i]) {
                     while (!leftSettle) {
                         if (boardArray[y][x - 1] !== null) {
-                            var i = 1;
-                            while (boardArray[y][x - i] !== sym) {
-                                boardArray[y][x - i] = sym;
+                            var a = 1;
+                            while (boardArray[y][x - a] !== sym) {
+                                boardArray[y][x - a] = sym;
                                 if (sym === "W")
-                                    document.getElementById(boardLength * y + (x - i)).firstChild.setAttribute("class", "white-tiles");
+                                    document.getElementById(boardLength * y + (x - a)).firstChild.setAttribute("class", "white-tiles");
                                 else
-                                    document.getElementById(boardLength * y + (x - i)).firstChild.setAttribute("class", "black-tiles");
-                                i++;
+                                    document.getElementById(boardLength * y + (x - a)).firstChild.setAttribute("class", "black-tiles");
+                                a++;
                             }
                             leftSettle = true;
 
@@ -707,13 +723,16 @@ var aiTurn = function() {
         checkOKtoPlace(getSym, getX, getY);
         var getTarget = document.getElementById(getY * boardLength + getX);
         var aTile = document.createElement("div");
+        getTarget.classList.add("test");
         if (getSym === "W") {
             aTile.setAttribute("class", "white-tiles");
             boardArray[getY][getX] = getSym;
+            updateLastMove(getSym,getX,getY);
 
         } else {
             aTile.setAttribute("class", "black-tiles");
             boardArray[getY][getX] = getSym;
+            updateLastMove(getSym,getX,getY);
         }
         changeRespectiveTiles(getTarget, getSym, getX, getY);
         tilePlaceSound();
@@ -957,8 +976,10 @@ var accumulator = function(arr, sym, x, y) {
 }
 
 
+
 var allBoardInitialisation = function(noclick = false) {
     createBoard();
+    takePutSettingsButton();
     var k = 0;
     var getSquares = document.querySelectorAll(".col");
     for (i = 0; i < boardLength; i++) {
@@ -971,9 +992,8 @@ var allBoardInitialisation = function(noclick = false) {
                 console.log("no clicking");
             } else {
                 getSquares[k].addEventListener("click", addTile);
-            }
 
-            // getSquares[k].addEventListener("click", tilePlaceSound)
+            }
             k++;
         }
     }
@@ -987,6 +1007,8 @@ var allBoardInitialisation = function(noclick = false) {
     }
 }
 
+
+
 var tilePlaceSound = function() {
     place.play();
 }
@@ -997,6 +1019,30 @@ var createBoard = function() {
     boardContainer.setAttribute("class", "main-board");
     var boardFrame = document.createElement("div");
     boardFrame.setAttribute("class", "board-frame");
+
+    // markers
+    var boardHMarkersContainer = document.createElement("div");
+    boardHMarkersContainer.setAttribute("class","h-markers-container");
+
+
+    for(var i=0;i<boardLength;i++){
+        var boardHMarkers = document.createElement("div");
+        boardHMarkers.setAttribute("class","h-markers");
+        boardHMarkersContainer.appendChild(boardHMarkers);
+        boardHMarkers.innerHTML = i+1;
+    }
+
+    var boardVMarkersContainer = document.createElement("div");
+    boardVMarkersContainer.setAttribute("class","v-markers-container");
+
+    for(var i=0;i<boardLength;i++){
+        var boardVMarkers = document.createElement("div");
+        boardVMarkers.setAttribute("class","v-markers");
+        boardVMarkersContainer.appendChild(boardVMarkers);
+        boardVMarkers.innerHTML = String.fromCharCode(65+i);
+    }
+
+
 
     var squareColorCounter = 0;
 
@@ -1016,12 +1062,45 @@ var createBoard = function() {
         boardContainer.appendChild(row);
     }
     boardFrame.appendChild(boardContainer);
+    boardFrame.appendChild(boardHMarkersContainer);
+    boardFrame.appendChild(boardVMarkersContainer);
     container.appendChild(boardFrame);
 
+    lastMoveDisplayCreator();
 
 }
 
+var lastMoveDisplayCreator = function(){
+    var mainContainer = document.querySelector(".main-container");
+    console.log("test");
+    var createContainer = document.createElement("div");
+    createContainer.setAttribute("class","last-move-display-container");
+    mainContainer.appendChild(createContainer);
 
+}
+
+var updateLastMove = function(sym,x,y){
+    var getLastMoveContainer = document.querySelector(".last-move-display-container");
+
+    var newMove = document.createElement("div");
+    newMove.setAttribute("class","last-move-slot");
+
+
+    var lastMoveTile = document.createElement("div");
+
+    if(sym === "W")
+        lastMoveTile.setAttribute("class","last-move-tile-white");
+    else
+        lastMoveTile.setAttribute("class","last-move-tile-black");
+    newMove.appendChild(lastMoveTile);
+    var lastMovePosition = document.createElement("div");
+    lastMovePosition.setAttribute("class","last-move-number");
+    lastMovePosition.innerHTML = String.fromCharCode(65+y)+(x+1);
+    newMove.appendChild(lastMovePosition);
+
+    // getLastMoveContainer.appendChild(newMove);
+    getLastMoveContainer.insertBefore(newMove,getLastMoveContainer.childNodes[0]);
+}
 
 var askPlayerInfoContainer = function(mode) {
     var mainPageContainer = document.querySelector(".main-page-container")
@@ -1169,40 +1248,64 @@ var startBackAllClicks = function() {
 
 var checkWin = function() {
     var getWinDisplay = document.querySelector(".win-lose-draw");
-    var getDarkShroud = document.querySelector(".dark-shroud");
+
     var getResultContainer = document.querySelector(".resultContainer");
 
     if (parseInt(blackScore.innerHTML) > parseInt(whiteScore.innerHTML)) {
 
         getWinDisplay.innerHTML = `${player1Name} Win!`;
-        getDarkShroud.style.visibility = "visible";
+        startAnimations();
+
         // getWinDisplay.style.animation = "fadein 2s";
 
     } else if (parseInt(blackScore.innerHTML) === parseInt(whiteScore.innerHTML)) {
 
         getWinDisplay.innerHTML = "It is a Draw!!";
-        getDarkShroud.style.visibility = "visible";
+        startAnimations();
         // getWinDisplay.style.animation = "fadein 2s";
         // getResultContainer.style.animation ="fadein 2s 2s forwards";
     } else if (parseInt(blackScore.innerHTML) < parseInt(whiteScore.innerHTML)) {
 
         getWinDisplay.innerHTML = `${player2Name} Win!`;
-        getDarkShroud.style.visibility = "visible";
+        startAnimations();
         // getWinDisplay.style.animation = "fadein 2s";
         // getResultContainer.style.animation ="fadein 2s 2s forwards";
     }
 }
 
-var takeOffShroud = function() {
-    document.querySelector(".dark-shroud").style.visibility = "hidden";
+var startAnimations = function() {
+    var getDarkShroud = document.querySelector(".dark-shroud");
+    var getWinDisplay = document.querySelector(".win-lose-draw");
+
+    getDarkShroud.style.visibility = "visible";
+    getDarkShroud.style.animation = "2s fadein forwards";
+    getWinDisplay.style.animation = "2s fadein forwards";
+
+    setTimeout(function() {
+        var getResultContainer = document.querySelector(".result-container");
+        getResultContainer.style.animation = "2s fadein forwards";
+    }, 2000);
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////                                      //////////////////////
-//////////////////////    DOCUMENT ON LOAD                    //////////////////////
-//////////////////////                                             //////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
+
+var takeOffShroud = function() {
+    document.querySelector(".dark-shroud").style.visibility = "hidden";
+    document.querySelector(".dark-shroud").style.opacity = "0";
+    document.querySelector(".dark-shroud").style.animation = null;
+    document.querySelector(".win-lose-draw").style.animation = null;
+    document.querySelector(".win-lose-draw").style.opacity = "0";
+    document.querySelector(".result-container").style.animation = null;
+    document.querySelector(".result-container").style.opacity = "0";
+
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////
+//////////////////////                                      /////////////////////
+//////////////////////    DOCUMENT ON LOAD                   ////////////////////
+//////////////////////                                       ////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 
 var restart = function() {
     takeOffShroud();
@@ -1210,7 +1313,8 @@ var restart = function() {
     while (mainContainer.firstChild) {
         mainContainer.removeChild(mainContainer.firstChild);
     }
-    allBoardInitialisation();
+
+
     counter = 1;
     var getSym = counter % 2 === 0 ? "W" : "B"
     blackScore.innerHTML = "2";
@@ -1228,6 +1332,8 @@ var restart = function() {
         predictionDots(getSym);
 
     } else {
+        startGlow1();
+        stopGlow2();
         botMode = true;
         demo = true;
 
@@ -1238,10 +1344,14 @@ var restart = function() {
 }
 
 var initAllBackToMainPage = function() {
+    takeOutSettingsButton();
     takeOffShroud();
     stopGlow1();
     stopGlow2();
-
+    mode = null;
+    stopDualBotMode();
+    document.getElementById("player-name").innerHTML = "AI - White";
+    document.getElementById("bot-name").innerHTML = "AI - Black";
     var mainContainer = document.querySelector(".main-container");
     while (mainContainer.firstChild) {
         mainContainer.removeChild(mainContainer.firstChild);
@@ -1249,6 +1359,7 @@ var initAllBackToMainPage = function() {
 
     botMode = false;
     demo = false;
+    singlePlayerMode = false;
     counter = 1;
     document.querySelector(".score-container").style.visibility = "hidden";
     blackScore.innerHTML = "2";
@@ -1300,6 +1411,27 @@ var initAllBackToMainPage = function() {
         setTimeout(preStartGame(mode), 100);
     })
 }
+
+var takePutSettingsButton = function(){
+    document.querySelector(".settings").style.visibility = "visible";
+}
+
+var takeOutSettingsButton = function(){
+    document.querySelector(".settings").style.visibility = "hidden";
+}
+
+var takeOutSettings = function(){
+    var getDarkShroud = document.querySelector(".dark-shroud");
+
+    getDarkShroud.style.visibility = "visible";
+    getDarkShroud.style.opacity="1";
+
+
+var getResultContainer = document.querySelector(".result-container");
+getResultContainer.style.opacity = "1";
+
+}
+
 
 document.addEventListener("DOMContentLoaded", function() {
 
