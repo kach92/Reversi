@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Reversi</title>
+    <link href="https://fonts.googleapis.com/css?family=Archivo+Black&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Leckerli+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
@@ -17,8 +18,12 @@
 
 </head>
 <body>
-        <iframe src="audio/Ryuichi Sakamoto  Merry Christmas, Mr. Lawrence (Piano Cover).mp3" allow="autoplay" style="display:none" id="iframeAudio" >
-        </iframe>
+        <iframe src="audio/250-milliseconds-of-silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+        <audio id="player" autoplay loop volume="0.1">
+            <source src="audio/Ryuichi Sakamoto  Merry Christmas, Mr. Lawrence (Piano Cover).mp3" type="audio/mp3">
+        </audio>
+
+
 
 
           <div class="header"><span class="black-letter">R</span><span class="white-letter">E</span><span class="black-letter">V</span><span class="white-letter">E</span><span class="black-letter">R</span><span class="white-letter">S</span><span class="black-letter">I</span></div>
