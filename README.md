@@ -22,3 +22,6 @@ My algorithm for the whole game is designed so that I do not hard code any numbe
 
 ## Unsolved Problems
 So far I do not have any bugs, but further functions that I can add would be a confirmation screen when user chose to quite or restart the game, an undo button for player to go back to his last move, a function for player to choose larger board sizes.
+
+## Disclaimer
+Music and background images does not created or belong to me and was borrowed from multiple sources online.
