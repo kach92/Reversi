@@ -27,11 +27,12 @@ var whiteScore = document.getElementById("white-score");
 
 
 var addTile = function(event) {
-
+    if (event instanceof Element){
+        event.target = event
+    }
     var getX = parseInt(event.target.getAttribute("x-axis"));
     var getY = parseInt(event.target.getAttribute("y-axis"));
     var getSym = counter % 2 === 0 ? "W" : "B"
-    var roughtCount = 0;
 
 
 
@@ -62,20 +63,7 @@ var addTile = function(event) {
         ////////////////////////////////////////////////////////////
         ///////////     Do Tiles Counting           ///////////////
         ////////////////////////////////////////////////////////////
-        var whiteCount = 0;
-        var blackCount = 0;
-        for (var i = 0; i < boardLength; i++) {
-            for (var j = 0; j < boardLength; j++) {
-
-                if (boardArray[i][j] === "W")
-                    whiteCount += 1;
-                else if (boardArray[i][j] === "B")
-                    blackCount += 1;
-
-            }
-        }
-        blackScore.innerHTML = blackCount;
-        whiteScore.innerHTML = whiteCount;
+        tilesCounting();
         ////////////////////////////////////////////////////////
 
 
@@ -83,26 +71,44 @@ var addTile = function(event) {
         //updated getSym as next sym to play//////////
         getSym = counter % 2 === 0 ? "W" : "B"
         console.log(getSym + "turn");
-        for (var y = 0; y < boardLength; y++) {
-            for (var x = 0; x < boardLength; x++) {
-                if (boardArray[y][x] === null) {
-                    if (checkOKtoPlace(getSym, x, y)) {
-                        roughtCount++;
-                    }
+        var slots = checkSlots(getSym);
+
+
+
+
+        if(slots.empty > 0){
+            if (slots.movable > 0) {
+                console.log(getSym + "still can");
+                glowchange(getSym);
+
+                if (singlePlayerMode) {
+                    tempStopAllClicks();
+                } else {
+                    predictionDots(getSym);
                 }
+                if (botMode) {
 
+                    setTimeout(aiTurn, 500);
+                }
+            }else{
+                debugger;
+                console.log(getSym + "no place to move, pass");
+                counter++;
+                getSym = counter % 2 === 0 ? "W" : "B"
+                console.log(getSym + "turn");
+                var slots = checkSlots(getSym);
+                if(slots.movable>0){
+                    predictionDots(getSym)
+                }else{
+                    console.log(getSym + "also cannot, end game ");
+                    stopGlow1();
+                    stopGlow2();
+                    botMode = false;
+                    tempStopAllClicks();
+                    checkWin();
+                }
             }
-        }
-        if (roughtCount > 0) {
-            console.log(getSym + "still can");
-            glowchange(getSym);
-            if (singlePlayerMode) {
-                tempStopAllClicks();
-            } else {
-                predictionDots(getSym);
-            }
-
-        } else {
+        }else{
             console.log(getSym + "cannot d");
             stopGlow1();
             stopGlow2();
@@ -110,21 +116,55 @@ var addTile = function(event) {
             tempStopAllClicks();
             checkWin();
         }
+
+
         ///////////////////////////////////////////////////
 
 
 
         //bot mode on and off
-        if (botMode) {
 
-            setTimeout(aiTurn, 3000);
-        }
 
     } else {
         console.log("Invalid Move")
         invalid.play();
     }
 
+}
+
+var checkSlots = function(sym){
+    let emptySlots = 0;
+    let roughtCount = 0;
+    for (var y = 0; y < boardLength; y++) {
+        for (var x = 0; x < boardLength; x++) {
+            if (boardArray[y][x] === null) {
+                emptySlots++;
+                if (checkOKtoPlace(sym, x, y)) {
+                    roughtCount++;
+                }
+            }
+
+        }
+    }
+
+    return {empty:emptySlots,movable:roughtCount}
+}
+
+var tilesCounting = function(){
+    var whiteCount = 0;
+    var blackCount = 0;
+    for (var i = 0; i < boardLength; i++) {
+        for (var j = 0; j < boardLength; j++) {
+
+            if (boardArray[i][j] === "W")
+                whiteCount += 1;
+            else if (boardArray[i][j] === "B")
+                blackCount += 1;
+
+        }
+    }
+    blackScore.innerHTML = blackCount;
+    whiteScore.innerHTML = whiteCount;
 }
 
 var predictionDots = function(sym) {
@@ -137,7 +177,7 @@ var predictionDots = function(sym) {
                     createPredictor.setAttribute("class", "predictor");
                     createPredictor.setAttribute("x-axis", x);
                     createPredictor.setAttribute("y-axis", y);
-                    createPredictor.setAttribute("onclick", "event.stopPropagation()");
+                    createPredictor.setAttribute("onclick", "runATile(this)")
                     var id = y * boardLength + x;
                     document.getElementById(id).appendChild(createPredictor);
                     predictorArray.push(id);
@@ -146,6 +186,11 @@ var predictionDots = function(sym) {
 
         }
     }
+}
+
+var runATile = function(something){
+    console.log(something.parentNode)
+    addTile(something.parentNode)
 }
 
 var removePredictionDots = function(sym) {
@@ -745,44 +790,43 @@ var aiTurn = function() {
 
 
         /////////////Count whole board and update tiles
-        var whiteCount = 0;
-        var blackCount = 0;
-
-        for (var i = 0; i < boardLength; i++) {
-            for (var j = 0; j < boardLength; j++) {
-
-                if (boardArray[i][j] === "W")
-                    whiteCount += 1;
-                else if (boardArray[i][j] === "B")
-                    blackCount += 1;
-
-            }
-        }
-        blackScore.innerHTML = blackCount;
-        whiteScore.innerHTML = whiteCount;
         ////////////////////////////////////////////////
-
+        tilesCounting();
 
         /////////Check anymore playable empty square
         getSym = counter % 2 === 0 ? "W" : "B"
         console.log(getSym + "turn");
-        for (var y = 0; y < boardLength; y++) {
-            for (var x = 0; x < boardLength; x++) {
-                if (boardArray[y][x] === null) {
-                    if (checkOKtoPlace(getSym, x, y)) {
-                        roughtCount++;
-                    }
+        var slots = checkSlots(getSym);
+
+        if (slots.empty > 0) {
+            if (slots.movable > 0) {
+                console.log(getSym + "still can");
+                glowchange(getSym);
+
+                if (singlePlayerMode) {
+                    startBackAllClicks();
+                    predictionDots(getSym);
                 }
+            }else{
+                debugger;
+                console.log(getSym + "no place to move, pass");
+                counter++;
+                getSym = counter % 2 === 0 ? "W" : "B"
+                console.log(getSym + "turn");
+                var slots = checkSlots(getSym);
+                if(slots.movable>0){
+                    console.log(getSym + "still can");
+                    if(singlePlayerMode){
+                        setTimeout(aiTurn,500);
+                    }
 
-            }
-        }
-
-        if (roughtCount > 0) {
-            console.log(getSym + "still can");
-            glowchange(getSym);
-            if (singlePlayerMode) {
-                startBackAllClicks();
-                predictionDots(getSym);
+                }else{
+                    console.log(getSym + "also cannot, end game ");
+                    stopGlow1();
+                    stopGlow2();
+                    botMode = false;
+                    checkWin();
+                }
             }
 
 
@@ -793,6 +837,16 @@ var aiTurn = function() {
             botMode = false;
             checkWin();
         }
+
+
+        ////////////////////////////////////////////////////////
+
+
+        //check any move left///////////////////////////
+        //updated getSym as next sym to play//////////
+
+
+
     } else {
         if (demo) {
             demo = false;
@@ -1002,7 +1056,7 @@ var allBoardInitialisation = function(noclick = false) {
     document.querySelector(".score-container").style.visibility = "visible";
 
     if (demo) {
-        dualBotMode = setInterval(aiTurn, 3000);
+        dualBotMode = setInterval(aiTurn, 500);
         botMode = true;
     }
 }
@@ -1072,7 +1126,6 @@ var createBoard = function() {
 
 var lastMoveDisplayCreator = function(){
     var mainContainer = document.querySelector(".main-container");
-    console.log("test");
     var createContainer = document.createElement("div");
     createContainer.setAttribute("class","last-move-display-container");
     mainContainer.appendChild(createContainer);
