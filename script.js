@@ -88,7 +88,7 @@ var addTile = function(event) {
                 }
                 if (botMode) {
 
-                    setTimeout(aiTurn, 3000);
+                    setTimeout(aiTurn, 2000);
                 }
             }else{
                 debugger;
@@ -817,7 +817,7 @@ var aiTurn = function() {
                 if(slots.movable>0){
                     console.log(getSym + "still can");
                     if(singlePlayerMode){
-                        setTimeout(aiTurn,3000);
+                        setTimeout(aiTurn,2000);
                     }
 
                 }else{
@@ -1056,7 +1056,7 @@ var allBoardInitialisation = function(noclick = false) {
     document.querySelector(".score-container").style.visibility = "visible";
 
     if (demo) {
-        dualBotMode = setInterval(aiTurn, 3000);
+        dualBotMode = setInterval(aiTurn, 2000);
         botMode = true;
     }
 }
