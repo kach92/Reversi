@@ -88,7 +88,7 @@ var addTile = function(event) {
                 }
                 if (botMode) {
 
-                    setTimeout(aiTurn, 500);
+                    setTimeout(aiTurn, 3000);
                 }
             }else{
                 debugger;
@@ -817,7 +817,7 @@ var aiTurn = function() {
                 if(slots.movable>0){
                     console.log(getSym + "still can");
                     if(singlePlayerMode){
-                        setTimeout(aiTurn,500);
+                        setTimeout(aiTurn,3000);
                     }
 
                 }else{
@@ -1056,7 +1056,7 @@ var allBoardInitialisation = function(noclick = false) {
     document.querySelector(".score-container").style.visibility = "visible";
 
     if (demo) {
-        dualBotMode = setInterval(aiTurn, 500);
+        dualBotMode = setInterval(aiTurn, 3000);
         botMode = true;
     }
 }
@@ -1267,6 +1267,8 @@ var preStartGame = function(mode) {
             var getSym = counter % 2 === 0 ? "W" : "B"
             predictionDots(getSym);
         } else if (mode === "demo") {
+            player1Name = "AI - Black"
+            player2Name = "AI - White"
             demo = true;
             removeMainPageContainer();
             allBoardInitialisation();
@@ -1362,6 +1364,9 @@ var takeOffShroud = function() {
 
 var restart = function() {
     takeOffShroud();
+    if(demo){
+        stopDualBotMode();
+    }
     var mainContainer = document.querySelector(".main-container");
     while (mainContainer.firstChild) {
         mainContainer.removeChild(mainContainer.firstChild);
@@ -1480,8 +1485,8 @@ var takeOutSettings = function(){
     getDarkShroud.style.opacity="1";
 
 
-var getResultContainer = document.querySelector(".result-container");
-getResultContainer.style.opacity = "1";
+    var getResultContainer = document.querySelector(".result-container");
+    getResultContainer.style.opacity = "1";
 
 }
 
