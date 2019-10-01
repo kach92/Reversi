@@ -91,7 +91,6 @@ var addTile = function(event) {
                     setTimeout(aiTurn, 2000);
                 }
             }else{
-                debugger;
                 console.log(getSym + "no place to move, pass");
                 counter++;
                 getSym = counter % 2 === 0 ? "W" : "B"
@@ -808,7 +807,6 @@ var aiTurn = function() {
                     predictionDots(getSym);
                 }
             }else{
-                debugger;
                 console.log(getSym + "no place to move, pass");
                 counter++;
                 getSym = counter % 2 === 0 ? "W" : "B"
